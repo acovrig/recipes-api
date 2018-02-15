@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  author: MyString
+  serving_size: 1
+  serving_suggestion: MyString
+  rating: 1.5
+
+two:
+  name: MyString
+  author: MyString
+  serving_size: 1
+  serving_suggestion: MyString
+  rating: 1.5

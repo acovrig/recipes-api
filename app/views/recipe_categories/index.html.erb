@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Recipe Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Recipe</th>
+      <th>Category</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @recipe_categories.each do |recipe_category| %>
+      <tr>
+        <td><%= recipe_category.recipe %></td>
+        <td><%= recipe_category.category %></td>
+        <td><%= link_to 'Show', recipe_category %></td>
+        <td><%= link_to 'Edit', edit_recipe_category_path(recipe_category) %></td>
+        <td><%= link_to 'Destroy', recipe_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Recipe Category', new_recipe_category_path %>

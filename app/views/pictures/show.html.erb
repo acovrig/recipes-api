@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Recipe:</strong>
+  <%= @picture.recipe %>
+</p>
+
+<p>
+  <strong>Fname:</strong>
+  <%= @picture.fname %>
+</p>
+
+<p>
+  <strong>Sum:</strong>
+  <%= @picture.sum %>
+</p>
+
+<p>
+  <strong>Width:</strong>
+  <%= @picture.width %>
+</p>
+
+<p>
+  <strong>Height:</strong>
+  <%= @picture.height %>
+</p>
+
+<p>
+  <strong>Size:</strong>
+  <%= @picture.size %>
+</p>
+
+<%= link_to 'Edit', edit_picture_path(@picture) %> |
+<%= link_to 'Back', pictures_path %>

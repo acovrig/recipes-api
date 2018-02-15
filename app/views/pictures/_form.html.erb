@@ -1,0 +1,47 @@
+<%= form_with(model: picture, local: true) do |form| %>
+  <% if picture.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(picture.errors.count, "error") %> prohibited this picture from being saved:</h2>
+
+      <ul>
+      <% picture.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :recipe_id %>
+    <%= form.text_field :recipe_id, id: :picture_recipe_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :fname %>
+    <%= form.text_field :fname, id: :picture_fname %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sum %>
+    <%= form.text_field :sum, id: :picture_sum %>
+  </div>
+
+  <div class="field">
+    <%= form.label :width %>
+    <%= form.number_field :width, id: :picture_width %>
+  </div>
+
+  <div class="field">
+    <%= form.label :height %>
+    <%= form.number_field :height, id: :picture_height %>
+  </div>
+
+  <div class="field">
+    <%= form.label :size %>
+    <%= form.number_field :size, id: :picture_size %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  recipe: one
+  qty: 1.5
+  unit: MyString
+  item: MyString
+  note: MyText
+
+two:
+  recipe: two
+  qty: 1.5
+  unit: MyString
+  item: MyString
+  note: MyText
