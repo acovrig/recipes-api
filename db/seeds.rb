@@ -6,4 +6,14 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-cat = Category.create(name: %w(desert easy crockpot simple healthy dinner).sample)
+cat = Category.create(
+  name: %w(desert easy crockpot healthy).sample
+)
+recipe = Recipe.create(
+  name: Faker::Food.dish,
+  author: Faker::Name.name,
+  serving_size: Faker::Number.between(1,10),
+  serving_suggestion: Faker::Food.description,
+  rating: Faker::Number.decimal(1, 5)
+)
+cat.recipes << recipe

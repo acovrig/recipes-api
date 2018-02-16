@@ -25,5 +25,14 @@
   <%= @recipe.rating %>
 </p>
 
+<p>
+  <strong>Directions:</strong>
+  <ol>
+    <% @recipe.directions.each do |dir| %>
+      <li><%= dir.action %></li>
+    <% end %>
+  </ol>
+</p>
+
 <%= link_to 'Edit', edit_recipe_path(@recipe) %> |
 <%= link_to 'Back', recipes_path %>
