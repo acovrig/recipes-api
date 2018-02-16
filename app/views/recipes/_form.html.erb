@@ -11,32 +11,32 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :name %>
-    <%= form.text_field :name, id: :recipe_name %>
+    <%= form.text_field :name, id: :recipe_name, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :author %>
-    <%= form.text_field :author, id: :recipe_author %>
+    <%= form.text_field :author, id: :recipe_author, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :serving_size %>
-    <%= form.number_field :serving_size, id: :recipe_serving_size %>
+    <%= form.number_field :serving_size, id: :recipe_serving_size, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :serving_suggestion %>
-    <%= form.text_field :serving_suggestion, id: :recipe_serving_suggestion %>
+    <%= form.text_field :serving_suggestion, id: :recipe_serving_suggestion, class: 'form-control' %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :rating %>
-    <%= form.text_field :rating, id: :recipe_rating %>
+    <%= form.text_field :rating, id: :recipe_rating, class: 'form-control' %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>
   </div>
 <% end %>

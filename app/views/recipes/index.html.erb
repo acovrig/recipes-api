@@ -2,7 +2,7 @@
 
 <h1>Recipes</h1>
 
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Name</th>
@@ -10,21 +10,35 @@
       <th>Serving size</th>
       <th>Serving suggestion</th>
       <th>Rating</th>
-      <th colspan="3"></th>
+      <th>View</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
 
   <tbody>
     <% @recipes.each do |recipe| %>
       <tr>
-        <td><%= recipe.name %></td>
+        <td><%= link_to recipe.name, recipe %></td>
         <td><%= recipe.author %></td>
         <td><%= recipe.serving_size %></td>
         <td><%= recipe.serving_suggestion %></td>
         <td><%= recipe.rating %></td>
-        <td><%= link_to 'Show', recipe %></td>
-        <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-        <td><%= link_to 'Destroy', recipe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to recipe, class: 'btn btn-sm btn-primary' do %>
+            <span class="glyphicon glyphicon-search"></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to recipe, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -32,4 +46,4 @@
 
 <br>
 
-<%= link_to 'New Recipe', new_recipe_path %>
+<%= link_to 'New Recipe', new_recipe_path, class: 'btn btn-primary' %>
