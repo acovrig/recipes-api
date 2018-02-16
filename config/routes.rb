@@ -1,12 +1,12 @@
 Rails.application.routes.draw do
-  resources :utensils
   root      'recipes#index'
-  resources :notes
-  resources :pictures
-  resources :directions
-  resources :ingredients
-  resources :recipe_categories
+  resources :recipes do
+    resources :utensils
+    resources :notes
+    resources :pictures
+    resources :directions
+    resources :ingredients
+  end
   resources :categories
-  resources :recipes
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
