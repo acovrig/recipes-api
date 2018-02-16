@@ -1,0 +1,32 @@
+<%= form_with(model: utensil, local: true) do |form| %>
+  <% if utensil.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(utensil.errors.count, "error") %> prohibited this utensil from being saved:</h2>
+
+      <ul>
+      <% utensil.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :recipe_id %>
+    <%= form.text_field :recipe_id, id: :utensil_recipe_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :utensil_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :qty %>
+    <%= form.number_field :qty, id: :utensil_qty %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
