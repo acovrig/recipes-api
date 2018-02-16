@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215192045) do
+ActiveRecord::Schema.define(version: 20180216025437) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -75,6 +75,15 @@ ActiveRecord::Schema.define(version: 20180215192045) do
     t.float "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "utensils", force: :cascade do |t|
+    t.integer "recipe_id"
+    t.string "name"
+    t.integer "qty"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["recipe_id"], name: "index_utensils_on_recipe_id"
   end
 
 end

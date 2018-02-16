@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :utensils
+  root      'recipes#index'
   resources :notes
   resources :pictures
   resources :directions

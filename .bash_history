@@ -7,3 +7,17 @@ rails g scaffold pictures recipe:references fname sum width:integer height:integ
 rails g scaffold note recipe:references note:text
 ls app/models
 rake db:migrate
+ls
+rails c
+rake db:migrate
+rake db:migrate
+rake db:seed
+rake db:seed
+rake db:seed
+rake db:seed
+rake db:migrate
+rails c
+rails c
+bundle
+bundle
+bundle
