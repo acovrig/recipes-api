@@ -26,17 +26,18 @@
         <td><%= recipe.rating %></td>
         <td>
           <%= link_to recipe, class: 'btn btn-sm btn-primary' do %>
-            <span class="glyphicon glyphicon-search"></span>
+            <%= fa_icon 'eye' %>
           <% end %>
         </td>
         <td>
           <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
-            <span class="glyphicon glyphicon-pencil"></span>
+            <%= fa_icon 'edit' %>
           <% end %>
         </td>
         <td>
           <%= link_to recipe, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
             <span class="glyphicon glyphicon-trash"></span>
+            <%= fa_icon 'trash' %>
           <% end %>
         </td>
       </tr>
