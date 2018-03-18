@@ -4,8 +4,8 @@ class Recipe < ApplicationRecord
     has_many :directions
     has_many :ingredients
     has_many :utensils
-    has_many :notes
     has_many :pictures
+    has_many :notes
 
-    accepts_nested_attributes_for :directions, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :directions, :ingredients, reject_if: :all_blank, allow_destroy: true
 end

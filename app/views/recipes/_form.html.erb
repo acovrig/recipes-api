@@ -53,4 +53,32 @@
       <button type="button" class="btn btn-default" onClick="addStep();">Add Step</button>
     </div>
   </div>
+
+  <h2><a href="#collapseIngredients" role="button" data-toggle="collapse">Ingredients</a></h2>
+  <div class="collapse show" id="collapseIngredients">
+    <table border=0 class="table table-hover">
+      <tr>
+        <th>Qty</th>
+        <th>Unit</th>
+        <th>Item</th>
+        <th>Note</th>
+        <th><%= fa_icon 'trash' %></td>
+      </tr>
+      <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
+        <tr>
+          <td><%= dir.number_field :qty, class: 'form-control', style: 'width: 5em;' %></td>
+          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;' %></td>
+          <td><%= dir.text_field :item, class: 'form-control', required: true %></td>
+          <td><%= dir.text_field :note, class: 'form-control' %></td>
+          <td><button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= @recipe.id %>, this)"><%= fa_icon 'trash' %></button></td>
+        </tr>
+      <% end %>
+    </table>
+    <div class="float-right">
+      <button type="button" class="btn btn-default" onClick="addIngredient();">Add Ingredient</button>
+    </div>
+  </div>
+
+  <br>
+  <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>
 <% end %>
