@@ -1,4 +1,4 @@
-<%= form_with(model: recipe, local: true) do |form| %>
+<%= form_for @recipe do |form| %>
   <% if recipe.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(recipe.errors.count, "error") %> prohibited this recipe from being saved:</h2>
@@ -36,7 +36,21 @@
     <%= form.text_field :rating, id: :recipe_rating, class: 'form-control' %>
   </div>
 
-  <div class="actions">
-    <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>
+  <h2><a href="#collapseDirections" role="button" data-toggle="collapse">Directions</a></h2>
+  <div class="collapse show" id="collapseDirections">
+    <ol>
+      <%= form.fields_for :directions, @recipe.directions do |dir| %>
+        <li>
+          <div class="form-inline">
+            <%= dir.hidden_field :step %>
+            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline' %>
+            <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= @recipe.id %>, this)"><%= fa_icon 'trash' %></button>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+    <div class="float-right">
+      <button type="button" class="btn btn-default" onClick="addStep();">Add Step</button>
+    </div>
   </div>
 <% end %>
