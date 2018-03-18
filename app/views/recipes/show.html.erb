@@ -1,38 +1,48 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @recipe.name %>
-</p>
+<table border="1" class="float-right">
+  <tr>
+    <td style="text-align: right;">Serving Size</td>
+    <td><%= @recipe.serving_size %></td>
+  </tr><tr>
+    <td style="text-align: right;">Serving Suggestion</td>
+    <td><%= @recipe.serving_suggestion %></td>
+  </tr><tr>
+    <td style="text-align: right;">Rating</td>
+    <td><%= @recipe.rating %></td>
+  </tr>
+</table>
 
-<p>
-  <strong>Author:</strong>
-  <%= @recipe.author %>
-</p>
+<h2><%= @recipe.name %></h2>
+<span>by <%= @recipe.author %></span>
 
-<p>
-  <strong>Serving size:</strong>
-  <%= @recipe.serving_size %>
-</p>
+<h2>Ingredients:</h2>
+<ul>
+  <% @recipe.ingredients.each do |ing| %>
+    <li><%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= ing.note.nil? ? '' : "(#{ing.note})" %></li>
+  <% end %>
+</ul>
 
-<p>
-  <strong>Serving suggestion:</strong>
-  <%= @recipe.serving_suggestion %>
-</p>
+<h2>Utensils:</h2>
+<ul>
+  <% @recipe.utensils.each do |util| %>
+    <li><%= util.qty %> <%= util.name %></li>
+  <% end %>
+</ul>
 
-<p>
-  <strong>Rating:</strong>
-  <%= @recipe.rating %>
-</p>
+<h2>Pictures:</h2>
+<ul>
+  <% @recipe.pictures.each do |pic| %>
+    <li><%= pic.fname %></li>
+  <% end %>
+</ul>
 
-<p>
-  <strong>Directions:</strong>
-  <ol>
-    <% @recipe.directions.each do |dir| %>
-      <li><%= dir.action %></li>
-    <% end %>
-  </ol>
-</p>
+<h2>Directions:</h2>
+<ol>
+  <% @recipe.directions.each do |dir| %>
+    <li><%= dir.action %></li>
+  <% end %>
+</ol>
 
 <%= link_to 'Edit', edit_recipe_path(@recipe) %> |
 <%= link_to 'Back', recipes_path %>
