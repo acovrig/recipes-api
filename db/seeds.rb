@@ -24,10 +24,10 @@ cats.each do |cat|
     (1..10).each do |ui|
       print "\rCategory #{cat.name} -> Recipe #{ri} Utensil #{ui}                                      "
       utensil = Utensil.create(
+        recipe: r,
         name: Faker::Food.spice,
         qty: Faker::Number.between(1,5)
       )
-      r.utensils << utensil
     end
     (1..10).each do |di|
       print "\rCategory #{cat.name} -> Recipe #{ri} Utensil Direction #{di}                             "
@@ -42,7 +42,7 @@ cats.each do |cat|
       ingredient = Ingredient.create(
         qty: Faker::Number.between(1, 10),
         unit: Faker::Measurement.height("none"),
-        item: %w(can bag box).sample,
+        item: Faker::Food.spice,
         note: Faker::Lorem.sentence
       )
       r.ingredients << ingredient
@@ -65,7 +65,11 @@ cats.each do |cat|
       )
       r.pictures << picture
     end
-    cat.recipes << r
+    begin
+      cat.recipes << r
+    rescue
+      next
+    end
   end
   puts ''
 end

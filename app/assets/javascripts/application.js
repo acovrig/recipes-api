@@ -15,3 +15,18 @@
 //= require popper
 //= require bootstrap
 //= require_tree .
+
+// $(document).ready(_ => {
+//   $('#search').on('keyup', _ => {
+//     if($('#search').val().length > 3) {
+//       $.ajax({
+//         url: '/search.json',
+//         type: 'POST',
+//         data: {search: $('#search').val()},
+//         success: function(data) {
+//           console.log(data);
+//         }
+//       })
+//     }
+//   })
+// })

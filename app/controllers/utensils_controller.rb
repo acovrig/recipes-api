@@ -61,6 +61,10 @@ class UtensilsController < ApplicationController
     end
   end
 
+  def search
+    @recipes = Utensil.where('name like ?', params[:q]).select(:recipe_id).map(&:recipe).sort_by{|r| r.name}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_utensil

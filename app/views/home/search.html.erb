@@ -1,0 +1,40 @@
+<% if @results[:recipes].length > 0 %>
+  <h3>Recipes</h3>
+  <ul>
+    <% @results[:recipes].each do |r| %>
+      <li><%= link_to r.name, recipe_path(r.id) %></li>
+    <% end %>
+  </ul>
+<% end %>
+<% if @results[:categories].length > 0 %>
+  <h3>Categories</h3>
+  <ul>
+    <% @results[:categories].each do |r| %>
+      <li><%= link_to r.name, category_path(r.id) %></li>
+    <% end %>
+  </ul>
+<% end %>
+<% if @results[:notes].length > 0 %>
+  <h3>Notes</h3>
+  <ul>
+    <% @results[:notes].each do |r| %>
+      <li><%= link_to r, search_note_path({q: params[:search]}) %></li>
+    <% end %>
+  </ul>
+<% end %>
+<% if @results[:utensils].length > 0 %>
+  <h3>Utensils</h3>
+  <ul>
+    <% @results[:utensils].each do |r| %>
+      <li><%= link_to r, search_utensil_path({q: r}) %></li>
+    <% end %>
+  </ul>
+<% end %>
+<% if @results[:ingredients].length > 0 %>
+  <h3>Ingredients</h3>
+  <ul>
+    <% @results[:ingredients].each do |r| %>
+      <li><%= link_to r, search_ingredient_path({q: r}) %></li>
+    <% end %>
+  </ul>
+<% end %>

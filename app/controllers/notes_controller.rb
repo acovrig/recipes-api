@@ -61,6 +61,10 @@ class NotesController < ApplicationController
     end
   end
 
+  def search
+    @recipes = Note.where('note like ?', "%#{params[:q]}%").select(:recipe_id).map(&:recipe).uniq.sort_by{|r| r.name}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note

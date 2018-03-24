@@ -1,0 +1,6 @@
+<h3>Recipes that have <em><%= params[:q] %></em> in notes</h3>
+<ul>
+<% @recipes.each do |r| %>
+  <li><%= link_to r.name, recipe_path(r.id) %></li>
+<% end %>
+</ul>

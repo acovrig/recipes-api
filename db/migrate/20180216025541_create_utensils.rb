@@ -7,5 +7,6 @@ class CreateUtensils < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_index :utensils, [:recipe_id, :name], unique: true, name: 'uq_utensil'
   end
 end
