@@ -2,21 +2,32 @@
 
 <h1>Categories</h1>
 
-<table>
+<table class="table table-hover">
   <thead>
     <tr>
       <th>Name</th>
-      <th colspan="3"></th>
+      <th># of<br>Recipes</th>
+      <th>Edit</th>
+      <th>Delete</th>
     </tr>
   </thead>
 
   <tbody>
     <% @categories.each do |category| %>
       <tr>
-        <td><%= category.name %></td>
-        <td><%= link_to 'Show', category %></td>
-        <td><%= link_to 'Edit', edit_category_path(category) %></td>
-        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to category.name, category %></td>
+        <td><%= category.recipes.count %></td>
+        <td>
+          <%= link_to edit_category_path(category), class: 'btn btn-sm btn-warning' do %>
+            <%= fa_icon 'edit' %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
+            <span class="glyphicon glyphicon-trash"></span>
+            <%= fa_icon 'trash' %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

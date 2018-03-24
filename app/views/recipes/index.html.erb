@@ -10,7 +10,6 @@
       <th>Serving size</th>
       <th>Serving suggestion</th>
       <th>Rating</th>
-      <th>View</th>
       <th>Edit</th>
       <th>Delete</th>
     </tr>
@@ -24,11 +23,6 @@
         <td><%= recipe.serving_size %></td>
         <td><%= recipe.serving_suggestion %></td>
         <td><%= recipe.rating %></td>
-        <td>
-          <%= link_to recipe, class: 'btn btn-sm btn-primary' do %>
-            <%= fa_icon 'eye' %>
-          <% end %>
-        </td>
         <td>
           <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
             <%= fa_icon 'edit' %>
