@@ -44,7 +44,7 @@
           <div class="form-inline">
             <%= dir.hidden_field :step %>
             <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline' %>
-            <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= @recipe.id %>, this)"><%= fa_icon 'trash' %></button>
+            <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button>
           </div>
         </li>
       <% end %>
@@ -70,7 +70,7 @@
           <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;' %></td>
           <td><%= dir.text_field :item, class: 'form-control', required: true %></td>
           <td><%= dir.text_field :note, class: 'form-control' %></td>
-          <td><button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= @recipe.id %>, this)"><%= fa_icon 'trash' %></button></td>
+          <td><button class="btn btn-danger btn-sm" type="button" onClick="delIngredient(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button></td>
         </tr>
       <% end %>
     </table>

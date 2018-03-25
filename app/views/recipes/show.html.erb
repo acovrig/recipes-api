@@ -30,12 +30,14 @@
   <% end %>
 </ul>
 
-<h2>Pictures:</h2>
-<ul>
-  <% @recipe.pictures.each do |pic| %>
-    <li><%= pic.fname %></li>
-  <% end %>
-</ul>
+<% if @recipe.pictures.length > 0 %>
+  <h2>Pictures:</h2>
+  <ul>
+    <% @recipe.pictures.each do |pic| %>
+      <li><%= pic.fname %></li>
+    <% end %>
+  </ul>
+<% end %>
 
 <h2>Directions:</h2>
 <ol>
