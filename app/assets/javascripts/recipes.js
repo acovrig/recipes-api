@@ -9,6 +9,7 @@ function addStep() {
   newDir.find('input[type="hidden"]').val(num).prop('name', 'recipe[directions_attributes][' + (num - 1) + '][step]').prop('id', 'recipe_directions_attributes_' + (num - 1) + '_step');
   newDir.find('input[type="text"]').val('').prop('name', 'recipe[directions_attributes][' + (num - 1) + '][action]').prop('id', 'recipe_directions_attributes_' + (num - 1) + '_action');
   div.after(newDir);
+  newDir.find('#recipe_directions_attributes_' + (num - 1) + '_action').focus();
 }
 
 function delStep(rid, elem) {
@@ -18,7 +19,7 @@ function delStep(rid, elem) {
   } else {
     num = $(elem).parent().children('input[type="hidden"]').val();
     id = $('#recipe_directions_attributes_' + (parseInt(num) - 1) + '_id').val();
-    if(rid == undefined) {
+    if(rid == undefined || id == undefined) {
       $(elem).parent().parent().remove();
     } else {
       $.ajax({
@@ -42,6 +43,7 @@ function addIngredient() {
   new_tr.find('input[id$="_item"]').val('').prop('name', 'recipe[ingredients_attributes][' + num + '][item]').prop('id', 'recipe_ingredients_attributes_' + num + '_item');
   new_tr.find('input[id$="_note"]').val('').prop('name', 'recipe[ingredients_attributes][' + num + '][note]').prop('id', 'recipe_ingredients_attributes_' + num + '_note');
   tr.after(new_tr);
+  new_tr.find('#recipe_ingredients_attributes_' + num + '_qty').focus();
 }
 
 function delIngredient(rid, elem) {
