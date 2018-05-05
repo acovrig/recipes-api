@@ -1,5 +1,5 @@
-FROM ruby:2.4.2
-LABEL author="Austin Covrig <austinc@iiw.org>"
+FROM ruby:2.5.1
+LABEL author="Austin Covrig <accovrig@gmail.com>"
 ENV HOME /src
 ENV RAILS_ENV=production
 CMD ["./docker_start.sh"]
@@ -17,7 +17,7 @@ RUN apt update \
 	&& touch /src/Gemfile.lock
 
 WORKDIR /src
-ADD Gemfile /src
+ADD Gemfile Gemfile.lock /src/
 RUN bundle install
 
 COPY . /src
