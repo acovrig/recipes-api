@@ -1,20 +1,27 @@
 <p id="notice"><%= notice %></p>
 
-<table border="1" class="float-right">
+<table class="float-right table-hover">
   <tr>
-    <td style="text-align: right;">Serving Size</td>
+    <td style="text-align: center;">Serving Size</td>
     <td><%= @recipe.serving_size %></td>
   </tr><tr>
-    <td style="text-align: right;">Serving Suggestion</td>
+    <td style="text-align: center;">Serving Suggestion</td>
     <td><%= @recipe.serving_suggestion %></td>
   </tr><tr>
-    <td style="text-align: right;">Rating</td>
+    <td style="text-align: center;">Rating</td>
     <td><%= @recipe.rating %></td>
   </tr>
 </table>
 
 <h2><%= @recipe.name %></h2>
 <span>by <%= @recipe.author %></span>
+
+<h2>Categories:</h2>
+<ul>
+  <% @recipe.categories.each do |cat| %>
+    <li><%= cat.name %></li>
+  <% end %>
+</ul>
 
 <h2>Ingredients:</h2>
 <ul>

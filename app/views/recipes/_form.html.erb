@@ -36,7 +36,11 @@
     <%= form.text_field :rating, id: :recipe_rating, class: 'form-control' %>
   </div>
 
-  <h2><a href="#collapseIngredients" role="button" data-toggle="collapse">Ingredients</a></h2>
+  <h2>Ingredients</h2>
+  <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseIngredients">
+    <span class="if-collapsed">Expand</span>
+    <span class="if-not-collapsed">Collapse</span>
+  </button>
   <div class="collapse show" id="collapseIngredients">
     <table border=0 class="table table-hover">
       <tr>
@@ -61,7 +65,11 @@
     </div>
   </div>
 
-  <h2><a href="#collapseDirections" role="button" data-toggle="collapse">Directions</a></h2>
+  <h2>Directions</h2>
+  <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseDirections">
+    <span class="if-collapsed">Expand</span>
+    <span class="if-not-collapsed">Collapse</span>
+  </button>
   <div class="collapse show" id="collapseDirections">
     <ol>
       <%= form.fields_for :directions, @recipe.directions do |dir| %>

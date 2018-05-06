@@ -5,7 +5,7 @@ if [ "$1" = "sidekiq" ]; then
 	sleep 99
 	exit
 fi;
-if [ -e /myapp/.production ]; then
+if [ -e ./.production ]; then
 	export RAILS_ENV=production
 	echo "============ Precompiling Assets ============"
 	bundle exec rake assets:precompile || exit
@@ -13,12 +13,12 @@ if [ -e /myapp/.production ]; then
 	bundle exec rake db:migrate || exit
 	echo "============ Starting Passenger ============="
 	export SECRET_KEY_BASE=production
-	rails s -b 0.0.0.0
-	echo "=============== Serer Stopped  ================"
+	bundle exec puma -C config/puma.rb
+	echo "=============== Server Stopped  ================"
 else
 	rm tmp/pids/server.pid
 	bundle
 	rails s -b 0.0.0.0
-	echo "=============== Serer Stopped  ================"
+	echo "=============== Server Stopped  ================"
 	sleep 99
 fi;

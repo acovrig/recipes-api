@@ -1,3 +1,20 @@
 // Place all the styles related to the recipes controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Detecting if button collapsed,
+// pulled from: https://stackoverflow.com/a/31967516/7748511
+[data-toggle="collapse"].collapsed .if-not-collapsed {
+  display: none;
+}
+[data-toggle="collapse"]:not(.collapsed) .if-collapsed {
+  display: none;
+}
+
+// Holds the recipe summary (not sure how to describe this, 
+// see the box in the top right corner when viewing a recipe)
+table, td, th {
+  border-collapse: collapse;
+  border: 2px solid black;
+  padding: 7px;
+}
