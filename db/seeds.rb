@@ -41,7 +41,7 @@ potato_soup.ingredients << [
 potato_soup.directions << [
   Direction.create(
     step: 1,
-    action: 'Put hte potatoes, water, and soup in the crockpot on medium for 6 hours.'
+    action: 'Put the potatoes, water, and soup in the crockpot on medium for 6 hours.'
   ),
   Direction.create(
     step: 2,

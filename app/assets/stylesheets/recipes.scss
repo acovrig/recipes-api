@@ -13,7 +13,7 @@
 
 // Holds the recipe summary (not sure how to describe this, 
 // see the box in the top right corner when viewing a recipe)
-table, td, th {
+table#recipe_info td, table#recipe_info th {
   border-collapse: collapse;
   border: 2px solid black;
   padding: 7px;
