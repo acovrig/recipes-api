@@ -17,6 +17,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item <%= 'active' if current_page?(categories_path) %>"><%= link_to 'Categories', categories_path, class: 'nav-link' %></li>
+          <li class="nav-item <%= 'active' if current_page?(recipes_path) %>"><%= link_to 'Recipes', recipes_path, class: 'nav-link' %></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
