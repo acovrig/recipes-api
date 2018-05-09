@@ -12,28 +12,31 @@
   <% end %>
 
   <div class="form-group">
+    <%# <label for="exampleInputEmail1">Email address</label> %>
+    <%# <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"> %>
+    <%# <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> %>
     <%= form.label :name %>
-    <%= form.text_field :name, id: :recipe_name, class: 'form-control', required: true %>
+    <%= form.text_field :name, id: :recipe_name, class: 'form-control', required: true, placeholder: :name %>
   </div>
 
   <div class="form-group">
     <%= form.label :author %>
-    <%= form.text_field :author, id: :recipe_author, class: 'form-control' %>
+    <%= form.text_field :author, id: :recipe_author, class: 'form-control', placeholder: :author %>
   </div>
 
   <div class="form-group">
     <%= form.label :serving_size %>
-    <%= form.number_field :serving_size, id: :recipe_serving_size, class: 'form-control' %>
+    <%= form.number_field :serving_size, id: :recipe_serving_size, class: 'form-control', placeholder: :serving_size %>
   </div>
 
   <div class="form-group">
     <%= form.label :serving_suggestion %>
-    <%= form.text_field :serving_suggestion, id: :recipe_serving_suggestion, class: 'form-control' %>
+    <%= form.text_field :serving_suggestion, id: :recipe_serving_suggestion, class: 'form-control', placeholder: :serving_suggestion %>
   </div>
 
   <div class="form-group">
     <%= form.label :rating %>
-    <%= form.text_field :rating, id: :recipe_rating, class: 'form-control' %>
+    <%= form.text_field :rating, id: :recipe_rating, class: 'form-control', placeholder: :rating %>
   </div>
 
   <h2>Ingredients</h2>
@@ -52,10 +55,10 @@
       </tr>
       <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
         <tr>
-          <td><%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;' %></td>
-          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;' %></td>
-          <td><%= dir.text_field :item, class: 'form-control', required: true %></td>
-          <td><%= dir.text_field :note, class: 'form-control' %></td>
+          <td><%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: :qty %></td>
+          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: :uint %></td>
+          <td><%= dir.text_field :item, class: 'form-control', required: true, placeholder: :item %></td>
+          <td><%= dir.text_field :note, class: 'form-control', placeholder: :note %></td>
           <td><button class="btn btn-danger btn-sm" type="button" onClick="delIngredient(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button></td>
         </tr>
       <% end %>
@@ -76,7 +79,7 @@
         <li>
           <div class="form-inline">
             <%= dir.hidden_field :step %>
-            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline' %>
+            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline', placeholder: :directions %>
             <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button>
           </div>
         </li>
