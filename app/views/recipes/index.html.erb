@@ -19,7 +19,7 @@
     <% @recipes.each do |recipe| %>
       <tr>
         <td><%= link_to recipe.name, recipe %></td>
-        <td><%= recipe.author %></td>
+        <td><%= recipe.author.name %></td>
         <td><%= recipe.serving_size %></td>
         <td><%= recipe.serving_suggestion %></td>
         <td><%= recipe.rating %></td>
