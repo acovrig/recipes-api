@@ -6,10 +6,35 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-crockpot = Category.create(name: 'crockpot')
+print 'User1 '
+u1 = User.find_by(email: 'accovrig@gmail.com')
+puts "found existing #{u1.id}" if u1
+if u1.nil?
+  u1 = User.new
+  u1.email = 'accovrig@gmail.com'
+  u1.password = 'asdf1234'
+  u1.password_confirmation = 'asdf1234'
+  u1.name = 'Austin Covrig'
+  u1.save!
+  puts 'done'
+end
+print 'User2 '
+u1 = User.find_by(email: 'aarcov@gmail.com')
+puts "found existing #{u1.id}" if u1
+if u1.nil?
+  u1 = User.new
+  u1.email = 'aarcov@gmail.com'
+  u1.password = 'asdf1234'
+  u1.password_confirmation = 'asdf1234'
+  u1.name = 'Aaron Covrig'
+  u1.save!
+  puts 'done'
+end
+
+crockpot = Category.create(name: 'crockpot', created_by: u1)
 potato_soup = Recipe.create(
   name: 'Potato Soup',
-  author: 'Austin Covrig'
+  author: u1
 )
 potato_soup.ingredients << [
   Ingredient.create(
@@ -55,7 +80,7 @@ potato_soup.utensils << [
 
 spice_cake = Recipe.create(
   name: 'Apple Spice Cake',
-  author: 'Austin Covrig'
+  author: u1
 )
 spice_cake.ingredients << [
   Ingredient.create(

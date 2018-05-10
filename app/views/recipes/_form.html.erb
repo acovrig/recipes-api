@@ -12,16 +12,13 @@
   <% end %>
 
   <div class="form-group">
-    <%# <label for="exampleInputEmail1">Email address</label> %>
-    <%# <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"> %>
-    <%# <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> %>
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :recipe_name, class: 'form-control', required: true, placeholder: 'The Megalodon Casserole' %>
+    <%= form.label :categories %>
+    <%= form.select :categories, Category.all.collect{|c| [c.name, c.id]}, {}, {multiple: true, class: 'form-control'} %>
   </div>
 
   <div class="form-group">
-    <%= form.label :author %>
-    <%= form.text_field :author, id: :recipe_author, class: 'form-control', placeholder: 'Arnold Schwarzenegger' %>
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :recipe_name, class: 'form-control', required: true, placeholder: 'The Megalodon Casserole' %>
   </div>
 
   <div class="form-group">
