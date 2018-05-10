@@ -1,9 +1,9 @@
 class CreateUtensils < ActiveRecord::Migration[5.1]
   def change
     create_table :utensils do |t|
-      t.references :recipe, foreign_key: true
-      t.string :name
-      t.integer :qty
+      t.references :recipe, foreign_key: true, null: false
+      t.string :name, null: false
+      t.integer :qty, null: false, default: 1
 
       t.timestamps
     end
