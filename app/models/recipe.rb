@@ -1,4 +1,5 @@
 class Recipe < ApplicationRecord
+    belongs_to :author, class_name: 'User'
     has_many :recipe_categories
     has_many :categories, through: :recipe_categories
     has_many :directions
