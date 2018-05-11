@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20180216025541) do
     t.integer "serving_size"
     t.string "serving_suggestion"
     t.float "rating", limit: 24
+    t.string "privacy", default: "internal", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "fk_rails_08ee84afe6"
