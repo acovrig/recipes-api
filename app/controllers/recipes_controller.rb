@@ -6,7 +6,7 @@ class RecipesController < ApplicationController
   # GET /recipes.json
   def index
     if current_user
-      @recipes = Recipe.where(privacy: %w(public internal private))
+      @recipes = Recipe.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
     else
       @recipes = Recipe.public_recipes
     end

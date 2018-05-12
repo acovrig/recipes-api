@@ -12,36 +12,11 @@ class HomeController < ApplicationController
       utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
       ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
     }
-
-    redirect_to @results[:recipes].first if @results[:recipes].length == 1 and
-      @results[:categories].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-    
-    redirect_to @results[:categories].first if @results[:categories].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-    
-    redirect_to @results[:notes].first if @results[:notes].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:categories].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-  
-    redirect_to @results[:utensils].first if @results[:utensils].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:categories].length == 0 and
-      @results[:ingredients].length == 0
-
-    redirect_to @results[:ingredients].first if @results[:ingredients].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:categories].length == 0
+    if user_signed_in?
+      @results[:recipes] = @results[:recipes].where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+    else
+      @results[:recipes] = @results[:recipes].where(privacy: 'public')
+    end
 
     respond_to do |format|
       format.html {}

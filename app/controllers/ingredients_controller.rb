@@ -65,7 +65,13 @@ class IngredientsController < ApplicationController
   end
 
   def search
-    @recipes = Ingredient.where('item like ?', params[:q]).select(:recipe_id).map(&:recipe).sort_by{|r| r.name}
+    @recipes = Recipe.where(id: Ingredient.where('item like ?', "%#{params[:q]}%").pluck(:recipe_id))
+    if current_user
+      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+    else
+      @recipes = @recipes.where(privacy: 'public')
+    end
+    @recipes = @recipes.select(:id, :name)
   end
 
   private
