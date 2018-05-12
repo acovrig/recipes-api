@@ -11,6 +11,12 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
+    @recipes = @category.recipes
+    if user_signed_in?
+      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+    else
+      @recipes = @recipes.where(privacy: 'public')
+    end
   end
 
   # GET /categories/new
