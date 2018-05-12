@@ -8,7 +8,7 @@
     <th>Serving<br>Suggestion</th>
     <th>Rating</th>
   </tr>
-  <% @category.recipes.each do |r| %>
+  <% @recipes.each do |r| %>
     <tr>
       <td><%= link_to r.name, r %></td>
       <td><%= r.serving_size %></td>
