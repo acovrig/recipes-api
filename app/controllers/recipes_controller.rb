@@ -5,12 +5,17 @@ class RecipesController < ApplicationController
   # GET /recipes
   # GET /recipes.json
   def index
-    @recipes = Recipe.all
+    if current_user
+      @recipes = Recipe.where(privacy: %w(public internal private))
+    else
+      @recipes = Recipe.public_recipes
+    end
   end
 
   # GET /recipes/1
   # GET /recipes/1.json
   def show
+    redirect_to recipes_path, flash: { alert: "You are not permitted to see recipe #{@recipe.id}" } and return if @recipe.privacy == 'private' and @recipe.author != current_user
   end
 
   # GET /recipes/new

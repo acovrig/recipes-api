@@ -3,12 +3,14 @@ class HomeController < ApplicationController
   end
 
   def search
+    @q = params[:search]
     @results = {
-      recipes: Recipe.where('name LIKE :q OR author LIKE :q', {q: "%#{params[:search]}%"}).select(:id, :name),
-      categories: Category.where('name LIKE ?', "%#{params[:search]}%"),
-      notes: Note.where('note like ?', "%#{params[:search]}%").pluck(:note),
-      utensils: Utensil.where('name like ?', "%#{params[:search]}%").distinct.pluck(:name),
-      ingredients: Ingredient.where('item like ?', "%#{params[:search]}%").distinct.pluck(:item)
+      authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+      recipes: Recipe.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+      categories: Category.where('name LIKE ?', "%#{@q}%"),
+      notes: Note.where('note like ?', "%#{@q}%").pluck(:note),
+      utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
+      ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
     }
 
     redirect_to @results[:recipes].first if @results[:recipes].length == 1 and

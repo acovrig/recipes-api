@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_recipe
+  before_action :set_recipe, except: [:search]
   before_action :set_note, only: [:show, :edit, :update, :destroy]
 
   # GET /notes
