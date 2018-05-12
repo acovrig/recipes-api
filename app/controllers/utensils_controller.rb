@@ -1,10 +1,12 @@
 class UtensilsController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_recipe
   before_action :set_utensil, only: [:show, :edit, :update, :destroy]
 
   # GET /utensils
   # GET /utensils.json
   def index
-    @utensils = Utensil.all
+    @utensils = @recipe.utensils
   end
 
   # GET /utensils/1
@@ -25,10 +27,11 @@ class UtensilsController < ApplicationController
   # POST /utensils.json
   def create
     @utensil = Utensil.new(utensil_params)
+    @utensil.recipe = @recipe
 
     respond_to do |format|
       if @utensil.save
-        format.html { redirect_to @utensil, notice: 'Utensil was successfully created.' }
+        format.html { redirect_to recipe_utensil_path(@recipe, @utensil), notice: 'Utensil was successfully created.' }
         format.json { render :show, status: :created, location: @utensil }
       else
         format.html { render :new }
@@ -42,7 +45,7 @@ class UtensilsController < ApplicationController
   def update
     respond_to do |format|
       if @utensil.update(utensil_params)
-        format.html { redirect_to @utensil, notice: 'Utensil was successfully updated.' }
+        format.html { redirect_to recipe_utensil_path(@recipe, @utensil), notice: 'Utensil was successfully updated.' }
         format.json { render :show, status: :ok, location: @utensil }
       else
         format.html { render :edit }
@@ -56,7 +59,7 @@ class UtensilsController < ApplicationController
   def destroy
     @utensil.destroy
     respond_to do |format|
-      format.html { redirect_to utensils_url, notice: 'Utensil was successfully destroyed.' }
+      format.html { redirect_to recipe_utensils_path(@recipe), notice: 'Utensil was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -68,7 +71,13 @@ class UtensilsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_utensil
-      @utensil = Utensil.find(params[:id])
+      @utensil = @recipe.utensils.find_by(id: params[:id])
+      redirect_to recipe_utensils_path(@recipe), flash: { alert: "Utensil #{params[:id]} not found for #{@recipe.name}" } and return if @utensil.nil?
+    end
+
+    def set_recipe
+      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
