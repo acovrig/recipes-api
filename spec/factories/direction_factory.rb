@@ -1,7 +1,13 @@
 FactoryBot.define do
+  sequence :step do |n|
+    n
+  end
+  sequence :action do |n|
+    "#{Faker::Hacker.verb} #{n}"
+  end
   factory :direction do
     association :recipe, factory: :recipe
-    step { Faker::Number.between(1, 5) }
-    action { Faker::Hacker.verb }
+    step
+    action
   end
 end

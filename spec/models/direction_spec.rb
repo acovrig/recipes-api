@@ -12,8 +12,24 @@ RSpec.describe Direction, type: :model do
       expect(direction.valid?).to eq(false)
     end
 
+    it 'requires a unique step' do
+      recipe = FactoryBot.create(:recipe)
+      step = Faker::Name.name
+      FactoryBot.create(:direction, recipe: recipe, step: step)
+      direction = FactoryBot.build(:direction, recipe: recipe, step: step)
+      expect(direction.valid?).to eq(false)
+    end
+
     it 'requires an action' do
       direction = FactoryBot.build(:direction, action: nil)
+      expect(direction.valid?).to eq(false)
+    end
+
+    it 'requires a unique action' do
+      recipe = FactoryBot.create(:recipe)
+      action = Faker::Name.name
+      FactoryBot.create(:direction, recipe: recipe, action: action)
+      direction = FactoryBot.build(:direction, recipe: recipe, action: action)
       expect(direction.valid?).to eq(false)
     end
 
