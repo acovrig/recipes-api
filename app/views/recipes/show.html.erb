@@ -26,7 +26,7 @@
 <h2>Ingredients:</h2>
 <ul>
   <% @recipe.ingredients.each do |ing| %>
-    <li><%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= ing.note.empty? ? '' : "(#{ing.note})" %></li>
+    <li><%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %></li>
   <% end %>
 </ul>
 
