@@ -1,6 +1,6 @@
 class RecipesController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
   before_action :set_recipe, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :edit, :create, :update]
 
   # GET /recipes
   # GET /recipes.json
@@ -22,6 +22,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1/edit
   def edit
+    redirect_to root_path and return if @recipe.author != current_user
   end
 
   # POST /recipes
@@ -44,6 +45,7 @@ class RecipesController < ApplicationController
   # PATCH/PUT /recipes/1
   # PATCH/PUT /recipes/1.json
   def update
+    redirect_to root_path and return if @recipe.author != current_user
     respond_to do |format|
       if @recipe.update(recipe_params)
         format.html { redirect_to @recipe, notice: 'Recipe was successfully updated.' }
@@ -58,6 +60,7 @@ class RecipesController < ApplicationController
   # DELETE /recipes/1
   # DELETE /recipes/1.json
   def destroy
+    redirect_to root_path and return if @recipe.author != current_user
     @recipe.destroy
     respond_to do |format|
       format.html { redirect_to recipes_url, notice: 'Recipe was successfully destroyed.' }

@@ -6,6 +6,7 @@ class CreateRecipes < ActiveRecord::Migration[5.1]
       t.integer :serving_size
       t.string :serving_suggestion
       t.float :rating
+      t.string :privacy, null: false, default: 'internal'
 
       t.timestamps
     end

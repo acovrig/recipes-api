@@ -8,8 +8,13 @@ class Recipe < ApplicationRecord
     has_many :pictures
     has_many :notes
 
-    validates :name, presence: true
+    validates :name, :privacy, presence: true
     validates :name, uniqueness: true
 
     accepts_nested_attributes_for :directions, :ingredients, reject_if: :all_blank, allow_destroy: true
+
+    scope :public_recipes, -> { where(privacy: 'public') }
+    scope :internal_recipes, -> { where(privacy: 'internal') }
+    scope :unlisted_recipes, -> { where(privacy: 'unlisted') }
+    scope :private_recipes, -> { where(privacy: 'private') }
 end

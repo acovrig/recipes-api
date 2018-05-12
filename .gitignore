@@ -24,3 +24,4 @@
 .bash_history
 
 mysql/
+coverage/*

@@ -8,12 +8,14 @@ stages:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_SHA
   DOCKER_DRIVER: overlay2
+  MYSQL_DATABASE: test
+  MYSQL_ROOT_PASSWORD: asdf
   RAILS_ENV: test
 
 before_script:
   - docker info
 
-build:
+docker_build:
   stage: build
   script:
     - docker build -t $CONTAINER_IMAGE .
@@ -21,13 +23,15 @@ build:
 test:
   stage: test
   script:
-    - docker run -i --rm $CONTAINER_IMAGE bash -c "rake routes"
-    # - docker run -i --rm $CONTAINER_IMAGE bash -c "rake db:migrate db:seed"
-    # - docker run -i --name $CI_COMMIT_SHA $CONTAINER_IMAGE bash -c "rake docs:generate"
-    # - docker commit -a "Gitlab CI" -m "Docs generation" $CI_COMMIT_SHA $CONTAINER_IMAGE
-    # - docker rm -vf $CI_COMMIT_SHA
+    - docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q | xargs -r docker rm -vf
+    - docker run -itd --name "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:5.7.22
+    - while [ "$(docker logs "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" | egrep 'mysqld. ready for connections.')" == "" ]; do sleep 1; done; sleep 5
+    - docker logs --tail=10 "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')"  | tail
+    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "rake db:drop db:create db:migrate"
+    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "rspec"
+    - docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q | xargs -r docker rm -vf
 
-deploy:
+docker_push:
   stage: deploy
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
