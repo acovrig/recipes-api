@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addCategoryModal">Add Category</button>
+
   <div class="form-group">
     <%= form.label :categories %>
     <%= form.select :categories, Category.all.collect{|c| [c.name, c.id]}, {}, {multiple: true, class: 'form-control'} %>
@@ -40,28 +42,59 @@
   <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseIngredients">
     <span class="if-collapsed">Expand</span>
     <span class="if-not-collapsed">Collapse</span>
-  </button>
-  <div class="collapse show" id="collapseIngredients">
-    <table border=0 class="table table-hover">
-      <tr>
-        <th>Qty</th>
-        <th>Unit</th>
-        <th>Item</th>
-        <th>Note</th>
-        <th><%= fa_icon 'trash' %></td>
-      </tr>
-      <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
-        <tr>
-          <td><%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %></td>
-          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup' %></td>
-          <td><%= dir.text_field :item, class: 'form-control', required: true, placeholder: 'salsa' %></td>
-          <td><%= dir.text_field :note, class: 'form-control', placeholder: 'Mild recommended, change to taste' %></td>
-          <td><button class="btn btn-danger btn-sm" type="button" onClick="delIngredient(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button></td>
-        </tr>
-      <% end %>
-    </table>
+  </button><br><br>
+  <div class="collapse" id="collapseIngredients">
+    <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Qty</div>
+          <div class="card-text">
+            <%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+          </div>
+          <div class="card-title">Unit</div>
+          <div class="card-text">
+            <%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %>
+          </div>
+          <div class="card-title">Item</div>
+          <div class="card-text">
+            <%= dir.text_field :item, class: 'form-control', required: true, placeholder: 'salsa' %>
+          </div>
+          <div class="card-title">Note</div>
+          <div class="card-text">
+            <%= dir.text_field :note, class: 'form-control', placeholder: 'Mild recommended, change to taste' %>
+          </div><br>
+          <button class="btn btn-danger" type="button" onClick="delIngredient(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %> Remove Ingredient</button>
+        </div>
+      </div>
+    <% end %><br>
     <div class="float-right">
       <button type="button" class="btn btn-default" onClick="addIngredient();">Add Ingredient</button>
+    </div>
+  </div>
+
+  <h2>Utensils</h2>
+  <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseUtensils">
+    <span class="if-collapsed">Expand</span>
+    <span class="if-not-collapsed">Collapse</span>
+  </button><br><br>
+  <div class="collapse" id="collapseUtensils">
+    <%= form.fields_for :utensils, @recipe.utensils do |dir| %>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Qty</div>
+          <div class="card-text">
+            <%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+          </div>
+          <div class="card-title">Name</div>
+          <div class="card-text">
+            <%= dir.text_field :name, class: 'form-control', required: true, placeholder: 'crockpot' %>
+          </div><br>
+          <button class="btn btn-danger" type="button" onClick="delUtensil(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %> Remove Utensil</button>
+        </div>
+      </div>
+    <% end %><br>
+    <div class="float-right">
+      <button type="button" class="btn btn-default" onClick="addUtensil();">Add Utensil</button>
     </div>
   </div>
 
@@ -69,8 +102,8 @@
   <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseDirections">
     <span class="if-collapsed">Expand</span>
     <span class="if-not-collapsed">Collapse</span>
-  </button>
-  <div class="collapse show" id="collapseDirections">
+  </button><br><br>
+  <div class="collapse" id="collapseDirections">
     <ol>
       <%= form.fields_for :directions, @recipe.directions do |dir| %>
         <li>
@@ -81,12 +114,34 @@
           </div>
         </li>
       <% end %>
-    </ol>
+    </ol><br>
     <div class="float-right">
       <button type="button" class="btn btn-default" onClick="addStep();">Add Step</button>
     </div>
   </div>
 
-  <br>
+  <br><br>
   <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>
 <% end %>
+
+<!-- addCategoryModal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= label_tag :category_name %>
+        <%= text_field_tag :category_name, '', class: 'form-control' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="addCategory()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

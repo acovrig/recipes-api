@@ -11,7 +11,7 @@ class Recipe < ApplicationRecord
     validates :name, :privacy, presence: true
     validates :name, uniqueness: true
 
-    accepts_nested_attributes_for :directions, :ingredients, reject_if: :all_blank, allow_destroy: true
+    accepts_nested_attributes_for :directions, :ingredients, :utensils, reject_if: :all_blank, allow_destroy: true
 
     scope :public_recipes, -> { where(privacy: 'public') }
     scope :internal_recipes, -> { where(privacy: 'internal') }
