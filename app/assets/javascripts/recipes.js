@@ -1,6 +1,12 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
+$(document).ready(_ => {
+  $('#addCategoryModal').on('shown.bs.modal', function () {
+    $('#category_name').trigger('focus');
+  });
+});
+
 function addStep() {
   div = $('#collapseDirections > ol > li:last');
   newDir = div.clone();
@@ -68,4 +74,23 @@ function delIngredient(rid, elem) {
       });
     }
   }
+
+function addCategory() {
+  category = $('#category_name').val();
+  $.ajax({
+    url: '/categories.json',
+    beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+    type: 'POST',
+    data: {category: {name: category}},
+    success: data => {
+      id = data.id;
+      $('#category_name').val('');
+      $('#recipe_categories')
+        .append($('<option></option>')
+        .attr('value', id)
+        .attr('selected', true)
+        .text(category));
+      $('#addCategoryModal').modal('hide');
+    }
+  });
 }
