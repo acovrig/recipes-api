@@ -13,7 +13,7 @@ class HomeController < ApplicationController
       ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
     }
     if user_signed_in?
-      @results[:recipes] = @results[:recipes].where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+      @results[:recipes] = @results[:recipes].where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
     else
       @results[:recipes] = @results[:recipes].where(privacy: 'public')
     end

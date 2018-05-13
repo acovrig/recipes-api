@@ -1,51 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Recipes</h1>
-<div id="paginate-container">
-  <div>
-    <%= will_paginate @recipes %>
-  </div>
-  <div>
-    Per Page: <%= select_tag :per_page, options_for_select(%w(10 20 40 50 100 200 500), @per_page), onchange: 'perPage(this);' %>
-  </div>
-</div>
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Author</th>
-      <th>Serving size</th>
-      <th>Serving suggestion</th>
-      <th>Rating</th>
-      <th>Edit</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @recipes.each do |recipe| %>
-      <tr>
-        <td><%= link_to recipe.name, recipe %></td>
-        <td><%= recipe.author.name %></td>
-        <td><%= recipe.serving_size %></td>
-        <td><%= recipe.serving_suggestion %></td>
-        <td><%= recipe.rating %></td>
-        <td>
-          <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
-            <%= fa_icon 'edit' %>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to recipe, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
-            <span class="glyphicon glyphicon-trash"></span>
-            <%= fa_icon 'trash' %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+<%= render partial: 'recipe_list' %>
 <br>
 
 <%= link_to 'New Recipe', new_recipe_path, class: 'btn btn-primary' %>
