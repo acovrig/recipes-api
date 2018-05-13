@@ -30,15 +30,6 @@
   </ul>
 <% end %>
 
-<% if @results[:notes].length > 0 %>
-  <h3>Notes</h3>
-  <ul>
-    <% @results[:notes].each do |r| %>
-      <li><%= link_to r, search_note_path({q: params[:search]}) %></li>
-    <% end %>
-  </ul>
-<% end %>
-
 <% if @results[:utensils].length > 0 %>
   <h3>Utensils</h3>
   <ul>

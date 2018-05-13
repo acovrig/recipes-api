@@ -8,7 +8,6 @@ class HomeController < ApplicationController
       authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
       recipes: Recipe.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
       categories: Category.where('name LIKE ?', "%#{@q}%"),
-      notes: Note.where('note like ?', "%#{@q}%").pluck(:note),
       utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
       ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
     }
