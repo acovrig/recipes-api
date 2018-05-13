@@ -27,7 +27,7 @@
           <% if controller_name == 'home' and action_name == 'author' %>
             <%= recipe.author.name %>
           <% else %>
-            <%= link_to recipe.author.name, author %>
+            <%= link_to recipe.author.name, author_path(recipe.author) %>
           <% end %>
         </td>
         <td class="tablet"><%= recipe.serving_size %></td>
