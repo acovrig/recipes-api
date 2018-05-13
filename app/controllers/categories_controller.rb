@@ -5,7 +5,8 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all
+    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @categories = Category.all.paginate(page: params[:page], per_page: @per_page)
   end
 
   # GET /categories/1
@@ -13,10 +14,12 @@ class CategoriesController < ApplicationController
   def show
     @recipes = @category.recipes
     if user_signed_in?
-      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+      @recipes = @recipes.where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
     else
       @recipes = @recipes.where(privacy: 'public')
     end
+    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
   end
 
   # GET /categories/new

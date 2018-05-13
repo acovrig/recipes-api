@@ -1,7 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Categories</h1>
-
+<div id="paginate-container">
+  <div>
+    <%= will_paginate @categories %>
+  </div>
+  <div>
+    Per Page: <%= select_tag :per_page, options_for_select(%w(10 20 40 50 100 200 500), @per_page), onchange: 'perPage(this);' %>
+  </div>
+</div>
 <table class="table table-hover">
   <thead>
     <tr>

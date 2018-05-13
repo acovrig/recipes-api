@@ -1,3 +1,8 @@
 @import "bootstrap";
 @import "font-awesome";
 @import "recipes";
+
+#paginate-container {
+  display: flex;
+  justify-content: space-between;
+}
