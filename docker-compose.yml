@@ -1,8 +1,7 @@
 version: '2'
 services:
-  aaron_mysql:
+  mysql:
     image: mysql
-    container_name: aaron_mysql
     restart: "no"
     environment:
       - MYSQL_ROOT_PASSWORD=asdf
@@ -12,23 +11,21 @@ services:
   rails:
     image: aaron/rails
     build: .
-    container_name: rails
     restart: "no"
     user: "root"
     environment:
       - RAILS_ENV=development
     links:
-      - aaron_mysql:mysql
+      - mysql:mysql
     volumes:
       - .:/src
     ports:
-      - 3000:3000
+      - 3000/tcp
 
   pma:
     image: phpmyadmin/phpmyadmin
-    container_name: pma
     restart: "no"
     ports:
-      - 8080:80/tcp
+      - 80/tcp
     links:
-      - aaron_mysql:db
+      - mysql:db

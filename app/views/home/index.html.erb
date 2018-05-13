@@ -1,2 +1,11 @@
 <h1>Recipes Home</h1>
-<p>This is a recipe system built by <a href="https://bitbucket.org/Doom4535/">Aaron</a> and <a href="https://bitbucket.org/acovrig/">Austin Covrig</a>. <%= link_to 'Click here', recipes_path %> to get started.</p>
+<p>
+  This is a recipe system built by <a href="https://bitbucket.org/Doom4535/">Aaron</a> and <a href="https://bitbucket.org/acovrig/">Austin Covrig</a>.
+</p>
+<p>
+  Feel free to login with <%= link_to 'a password', new_user_session_path %>,
+  <%= link_to 'Google', user_google_oauth2_omniauth_authorize_path %>,
+  or <%= link_to 'Facebook', user_facebook_omniauth_authorize_path %>.
+  You can browse <%= link_to 'public recipes', recipes_path %> if you do not want to login,
+  however, you will need an account to save recipes.
+</p>

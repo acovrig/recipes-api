@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Src</title>
+    <title>Covrig Recipes</title>
+    <%#subtitle>Your Food, Your Choice</subtitle%>
     <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
@@ -17,13 +19,16 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item <%= 'active' if current_page?(categories_path) %>"><%= link_to 'Categories', categories_path, class: 'nav-link' %></li>
-          <li class="nav-item <%= 'active' if current_page?(recipes_path) %>"><%= link_to 'Recipes', recipes_path, class: 'nav-link' %></li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a href="#" class="dropdown-item">Login</a>
-            </div>
-          </li>
+          <% if user_signed_in? %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link_to 'Logout', destroy_user_session_path, method: :delete, class: 'dropdown-item' %>
+              </div>
+            </li>
+          <% else %>
+            <li class="nav-item <%= 'active' if current_page?(new_user_session_path) %>"><%= link_to 'Login', new_user_session_path, class: 'nav-link' %></li>
+          <% end %>
         </ul>
         <%= form_tag search_path, method: :get, class: 'form-inline my-2 my-lg-0' do %>
           <%= text_field_tag :search, nil, class: 'form-control mr-sm-2', type: 'search', placeholder: 'Search', 'aria-label' => 'Search' %>
@@ -31,6 +36,17 @@
         <% end %>
       </div><!-- /.navbar-collapse -->
     </nav>
+
+    <% if notice %>
+      <div class="alert alert-warning">
+        <p id="notice"><%= notice %></p>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-danger">
+        <p id="alert"><%= alert %></p>
+      </div>
+    <% end %>
 
     <div class="container" style="padding-top: 20px;">
       <div class="jumbotron">

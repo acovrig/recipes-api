@@ -14,8 +14,11 @@ ActiveRecord::Schema.define(version: 20180216025541) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
+    t.bigint "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "fk_rails_335fee1547"
+    t.index ["name", "created_by_id"], name: "uq_category", unique: true
   end
 
   create_table "directions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -24,7 +27,7 @@ ActiveRecord::Schema.define(version: 20180216025541) do
     t.string "action", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["recipe_id", "step"], name: "index_directions_on_recipe_id_and_step", unique: true
+    t.index ["recipe_id", "step"], name: "uq_direction", unique: true
     t.index ["recipe_id"], name: "index_directions_on_recipe_id"
   end
 
@@ -36,13 +39,13 @@ ActiveRecord::Schema.define(version: 20180216025541) do
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["recipe_id", "item"], name: "index_ingredients_on_recipe_id_and_item", unique: true
+    t.index ["recipe_id", "item"], name: "uq_ingredient", unique: true
     t.index ["recipe_id"], name: "index_ingredients_on_recipe_id"
   end
 
   create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "recipe_id"
-    t.text "note"
+    t.bigint "recipe_id", null: false
+    t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["recipe_id"], name: "index_notes_on_recipe_id"
@@ -50,10 +53,10 @@ ActiveRecord::Schema.define(version: 20180216025541) do
 
   create_table "pictures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "recipe_id"
-    t.string "fname"
-    t.string "sum"
-    t.integer "width"
-    t.integer "height"
+    t.string "fname", null: false
+    t.string "sum", null: false
+    t.integer "width", null: false
+    t.integer "height", null: false
     t.integer "size"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -61,39 +64,63 @@ ActiveRecord::Schema.define(version: 20180216025541) do
   end
 
   create_table "recipe_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "recipe_id"
-    t.bigint "category_id"
+    t.bigint "recipe_id", null: false
+    t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_recipe_categories_on_category_id"
+    t.index ["recipe_id", "category_id"], name: "uq_recipe_category", unique: true
     t.index ["recipe_id"], name: "index_recipe_categories_on_recipe_id"
   end
 
   create_table "recipes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
-    t.string "author"
+    t.bigint "author_id", null: false
     t.integer "serving_size"
     t.string "serving_suggestion"
     t.float "rating", limit: 24
+    t.string "privacy", default: "internal", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "fk_rails_08ee84afe6"
+    t.index ["name", "author_id"], name: "uq_recipe", unique: true
+  end
+
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "provider"
+    t.string "uid"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "utensils", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "recipe_id"
-    t.string "name"
-    t.integer "qty"
+    t.bigint "recipe_id", null: false
+    t.string "name", null: false
+    t.integer "qty", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["recipe_id", "name"], name: "uq_utensil", unique: true
     t.index ["recipe_id"], name: "index_utensils_on_recipe_id"
   end
 
+  add_foreign_key "categories", "users", column: "created_by_id"
   add_foreign_key "directions", "recipes"
   add_foreign_key "ingredients", "recipes"
   add_foreign_key "notes", "recipes"
   add_foreign_key "pictures", "recipes"
   add_foreign_key "recipe_categories", "categories"
   add_foreign_key "recipe_categories", "recipes"
+  add_foreign_key "recipes", "users", column: "author_id"
   add_foreign_key "utensils", "recipes"
 end

@@ -1,22 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h2><%= @category.name %></h2>
-<table class="table table-hover">
-  <tr>
-    <th>Recipe</th>
-    <th>Serving<br>Size</th>
-    <th>Serving<br>Suggestion</th>
-    <th>Rating</th>
-  </tr>
-  <% @category.recipes.each do |r| %>
-    <tr>
-      <td><%= link_to r.name, r %></td>
-      <td><%= r.serving_size %></td>
-      <td><%= r.serving_suggestion %></td>
-      <td><%= r.rating %></td>
-    </tr>
-  <% end %>
-</table>
+<%= render partial: 'recipe_list' %>
 
 <%= link_to 'Edit', edit_category_path(@category) %> |
 <%= link_to 'Back', categories_path %>

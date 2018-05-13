@@ -1,4 +1,5 @@
 [![pipeline status](http://git.thecovrigs.net/acovrig/recipes/badges/master/pipeline.svg)](http://git.thecovrigs.net/acovrig/recipes/commits/master)
+[![pipeline status](http://git.thecovrigs.net/acovrig/recipes/badges/master/coverage.svg)](http://git.thecovrigs.net/acovrig/recipes/commits/master)
 # README
 
 This README would normally document whatever steps are necessary to get the

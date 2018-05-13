@@ -30,3 +30,16 @@
 //     }
 //   })
 // })
+
+function perPage(elem) {
+  var uri=window.location.href;
+  var val = $(elem).val();
+  if(uri.includes('per_page=')) {
+    var new_uri = uri.replace(/per_page=(\d*)/, 'per_page=' + val);
+  } else if(window.location.search == '') {
+    var new_uri = uri + '?per_page=' + val;
+  } else {
+    var new_uri = uri + '&per_page=' + val;
+  }
+  window.location = new_uri;
+}

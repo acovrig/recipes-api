@@ -1,10 +1,12 @@
 class NotesController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_recipe, except: [:search]
   before_action :set_note, only: [:show, :edit, :update, :destroy]
 
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.all
+    @notes = @recipe.notes
   end
 
   # GET /notes/1
@@ -28,7 +30,7 @@ class NotesController < ApplicationController
 
     respond_to do |format|
       if @note.save
-        format.html { redirect_to @note, notice: 'Note was successfully created.' }
+        format.html { redirect_to recipe_note_path(@recipe, @note), notice: 'Note was successfully created.' }
         format.json { render :show, status: :created, location: @note }
       else
         format.html { render :new }
@@ -42,7 +44,7 @@ class NotesController < ApplicationController
   def update
     respond_to do |format|
       if @note.update(note_params)
-        format.html { redirect_to @note, notice: 'Note was successfully updated.' }
+        format.html { redirect_to recipe_note_path(@recipe, @note), notice: 'Note was successfully updated.' }
         format.json { render :show, status: :ok, location: @note }
       else
         format.html { render :edit }
@@ -56,19 +58,21 @@ class NotesController < ApplicationController
   def destroy
     @note.destroy
     respond_to do |format|
-      format.html { redirect_to notes_url, notice: 'Note was successfully destroyed.' }
+      format.html { redirect_to recipe_notes_path(@recipe), notice: 'Note was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-
-  def search
-    @recipes = Note.where('note like ?', "%#{params[:q]}%").select(:recipe_id).map(&:recipe).uniq.sort_by{|r| r.name}
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_note
-      @note = Note.find(params[:id])
+      @note = @recipe.notes.find_by(id: params[:id])
+      redirect_to recipe_notes_path(@recipe), flash: { alert: "note #{params[:id]} not found for #{@recipe.name}" } and return if @note.nil?
+    end
+
+    def set_recipe
+      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

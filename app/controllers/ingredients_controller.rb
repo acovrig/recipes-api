@@ -1,10 +1,12 @@
 class IngredientsController < ApplicationController
+  before_action :authenticate_user!, except: [:search]
+  before_action :set_recipe, except: [:search]
   before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
 
   # GET /ingredients
   # GET /ingredients.json
   def index
-    @ingredients = Ingredient.all
+    @ingredients = @recipe.ingredients
   end
 
   # GET /ingredients/1
@@ -25,10 +27,11 @@ class IngredientsController < ApplicationController
   # POST /ingredients.json
   def create
     @ingredient = Ingredient.new(ingredient_params)
+    @ingredient.recipe = @recipe
 
     respond_to do |format|
       if @ingredient.save
-        format.html { redirect_to @ingredient, notice: 'Ingredient was successfully created.' }
+        format.html { redirect_to recipe_ingredient_path(@recipe, @ingredient), notice: 'Ingredient was successfully created.' }
         format.json { render :show, status: :created, location: @ingredient }
       else
         format.html { render :new }
@@ -42,7 +45,7 @@ class IngredientsController < ApplicationController
   def update
     respond_to do |format|
       if @ingredient.update(ingredient_params)
-        format.html { redirect_to @ingredient, notice: 'Ingredient was successfully updated.' }
+        format.html { redirect_to recipe_ingredient_path(@recipe, @ingredient), notice: 'Ingredient was successfully updated.' }
         format.json { render :show, status: :ok, location: @ingredient }
       else
         format.html { render :edit }
@@ -56,19 +59,31 @@ class IngredientsController < ApplicationController
   def destroy
     @ingredient.destroy
     respond_to do |format|
-      format.html { redirect_to ingredients_url, notice: 'Ingredient was successfully destroyed.' }
+      format.html { redirect_to recipe_ingredients_path(@recipe), notice: 'Ingredient was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   def search
-    @recipes = Ingredient.where('item like ?', params[:q]).select(:recipe_id).map(&:recipe).sort_by{|r| r.name}
+    @recipes = Recipe.where(id: Ingredient.where('item like ?', "%#{params[:q]}%").pluck(:recipe_id))
+    if current_user
+      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
+    else
+      @recipes = @recipes.where(privacy: 'public')
+    end
+    @recipes = @recipes.select(:id, :name)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ingredient
-      @ingredient = Ingredient.find(params[:id])
+      @ingredient = @recipe.ingredients.find_by(id: params[:id])
+      redirect_to recipe_ingredients_path(@recipe), flash: { alert: "Ingredient #{params[:id]} not found for #{@recipe.name}" } and return if @ingredient.nil?
+    end
+
+    def set_recipe
+      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -7,6 +7,6 @@ class CreateDirections < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :directions, [:recipe_id, :step], unique: true
+    add_index :directions, [:recipe_id, :step], unique: true, name: 'uq_direction'
   end
 end

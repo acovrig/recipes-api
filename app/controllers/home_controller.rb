@@ -1,49 +1,38 @@
 class HomeController < ApplicationController
   def index
-  end
+  end # index
 
   def search
+    @q = params[:search]
     @results = {
-      recipes: Recipe.where('name LIKE :q OR author LIKE :q', {q: "%#{params[:search]}%"}).select(:id, :name),
-      categories: Category.where('name LIKE ?', "%#{params[:search]}%"),
-      notes: Note.where('note like ?', "%#{params[:search]}%").pluck(:note),
-      utensils: Utensil.where('name like ?', "%#{params[:search]}%").distinct.pluck(:name),
-      ingredients: Ingredient.where('item like ?', "%#{params[:search]}%").distinct.pluck(:item)
+      authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+      recipes: Recipe.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+      categories: Category.where('name LIKE ?', "%#{@q}%"),
+      utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
+      ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
     }
-
-    redirect_to @results[:recipes].first if @results[:recipes].length == 1 and
-      @results[:categories].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-    
-    redirect_to @results[:categories].first if @results[:categories].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-    
-    redirect_to @results[:notes].first if @results[:notes].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:categories].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:ingredients].length == 0
-  
-    redirect_to @results[:utensils].first if @results[:utensils].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:categories].length == 0 and
-      @results[:ingredients].length == 0
-
-    redirect_to @results[:ingredients].first if @results[:ingredients].length == 1 and
-      @results[:recipes].length == 0 and
-      @results[:notes].length == 0 and
-      @results[:utensils].length == 0 and
-      @results[:categories].length == 0
+    if user_signed_in?
+      @results[:recipes] = @results[:recipes].where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
+    else
+      @results[:recipes] = @results[:recipes].where(privacy: 'public')
+    end
 
     respond_to do |format|
       format.html {}
       format.json { render json: @results and return }
     end
-  end
+  end # search
+
+  def author
+    @user = User.find_by(id: params[:id])
+    redirect_to root_path, flash: { alert: "Author #{params[:id]} not found." } and return if @user.nil?
+    @recipes = Recipe.where(author: @user)
+    if user_signed_in?
+      @recipes = @recipes.where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
+    else
+      @recipes = @recipes.where(privacy: 'public')
+    end
+    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
+  end # author
 end

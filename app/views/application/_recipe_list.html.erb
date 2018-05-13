@@ -1,0 +1,50 @@
+<div id="paginate-container">
+  <div>
+    <%= will_paginate @recipes %>
+  </div>
+  <div>
+    Per Page: <%= select_tag :per_page, options_for_select(%w(10 20 40 50 100 200 500), @per_page), onchange: 'perPage(this);' %>
+  </div>
+</div>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Author</th>
+      <th class="tablet">Serving size</th>
+      <th class="tablet">Serving suggestion</th>
+      <th class="desktop">Rating</th>
+      <th class="desktop">Edit</th>
+      <th class="desktop">Delete</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @recipes.each do |recipe| %>
+      <tr>
+        <td><%= link_to recipe.name, recipe %></td>
+        <td>
+          <% if controller_name == 'home' and action_name == 'author' %>
+            <%= recipe.author.name %>
+          <% else %>
+            <%= link_to recipe.author.name, author_path(recipe.author) %>
+          <% end %>
+        </td>
+        <td class="tablet"><%= recipe.serving_size %></td>
+        <td class="tablet"><%= recipe.serving_suggestion %></td>
+        <td class="desktop"><%= recipe.rating %></td>
+        <td class="desktop">
+          <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
+            <%= fa_icon 'edit' %>
+          <% end %>
+        </td>
+        <td class="desktop">
+          <%= link_to recipe, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
+            <span class="glyphicon glyphicon-trash"></span>
+            <%= fa_icon 'trash' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
