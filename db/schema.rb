@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20180216025541) do
     t.integer "width", null: false
     t.integer "height", null: false
     t.integer "size"
+    t.string "caption"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["recipe_id"], name: "index_pictures_on_recipe_id"

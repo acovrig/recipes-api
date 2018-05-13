@@ -17,6 +17,12 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore uploaded images and thumbnails.
+/public/images/*
+/public/thmb/*
+!/public/images/.keep
+!/public/thmb/.keep
+
 /node_modules
 /yarn-error.log
 

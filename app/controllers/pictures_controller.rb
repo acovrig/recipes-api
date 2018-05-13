@@ -78,6 +78,6 @@ class PicturesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def picture_params
-      params.require(:picture).permit(:recipe_id, :fname, :sum, :width, :height, :size)
+      params.require(:picture).permit(:recipe_id, :fname, :sum, :width, :height, :size, :caption)
     end
 end

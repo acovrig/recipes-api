@@ -1,10 +1,11 @@
 FactoryBot.define do
   factory :picture do
     association :recipe, factory: :recipe
-    fname { Faker::File.file_name }
+    fname { Faker::File.file_name(nil, nil, 'jpg', '') }
     sum { Faker::Internet.password(32, 32) }
     width { Faker::Number.between(480, 1920) }
     height { Faker::Number.between(480, 1280) }
     size { Faker::Number.between(1024, 209715200) }
+    caption { Faker::Lorem.sentence }
   end
 end

@@ -39,11 +39,11 @@
 
 <% if @recipe.pictures.length > 0 %>
   <h2>Pictures:</h2>
-  <ul>
+  <div id="gallery">
     <% @recipe.pictures.each do |pic| %>
-      <li><%= pic.fname %></li>
+      <a href="#" data-toggle="modal" data-target="#pic<%= pic.id %>"><%= image_tag "/thmb/#{pic.fname}" %></a>
     <% end %>
-  </ul>
+  </div>
 <% end %>
 
 <h2>Directions:</h2>
@@ -55,3 +55,20 @@
 
 <%= link_to 'Edit', edit_recipe_path(@recipe) %> |
 <%= link_to 'Back', recipes_path %>
+
+<% @recipe.pictures.each do |pic| %>
+  <div class="modal fade" id="<%= "pic#{pic.id}" %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title" id="myLargeModalLabel-1"><%= pic.caption %></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <%= image_tag "/images/#{pic.fname}", class: 'img-responsive img-rounded center-block' %>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal image -->
+<% end %>
