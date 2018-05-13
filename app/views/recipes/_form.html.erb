@@ -67,6 +67,32 @@
     </div>
   </div>
 
+  <h2>Utensils</h2>
+  <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseUtensils">
+    <span class="if-collapsed">Expand</span>
+    <span class="if-not-collapsed">Collapse</span>
+  </button><br><br>
+  <div class="collapse" id="collapseUtensils">
+    <%= form.fields_for :utensils, @recipe.utensils do |dir| %>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Qty</div>
+          <div class="card-text">
+            <%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+          </div>
+          <div class="card-title">Name</div>
+          <div class="card-text">
+            <%= dir.text_field :name, class: 'form-control', required: true, placeholder: 'crockpot' %>
+          </div><br>
+          <button class="btn btn-danger" type="button" onClick="delUtensil(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %> Remove Utensil</button>
+        </div>
+      </div>
+    <% end %><br>
+    <div class="float-right">
+      <button type="button" class="btn btn-default" onClick="addUtensil();">Add Utensil</button>
+    </div>
+  </div>
+
   <h2>Directions</h2>
   <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseDirections">
     <span class="if-collapsed">Expand</span>

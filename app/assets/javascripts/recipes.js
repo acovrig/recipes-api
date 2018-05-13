@@ -74,6 +74,39 @@ function delIngredient(rid, elem) {
       });
     }
   }
+}
+
+function addUtensil() {
+  card = $('#collapseUtensils div.card:last');
+  new_card = card.clone();
+  num = card.parent().children().length + 1;
+  new_card.find('input[id$="_qty"]').val('').prop('name', 'recipe[utensils_attributes][' + num + '][qty]').prop('id', 'recipe_utensils_attributes_' + num + '_qty');
+  new_card.find('input[id$="_name"]').val('').prop('name', 'recipe[utensils_attributes][' + num + '][name]').prop('id', 'recipe_utensils_attributes_' + num + '_name');
+  card.after(new_card);
+  new_card.find('#recipe_utensils_attributes_' + num + '_qty').focus();
+}
+
+function delUtensil(rid, elem) {
+  if($(elem).parent().parent().children().length < 3) {
+    $(elem).parent().parent().find('input[id$="_qty"]').val('').prop('name', 'recipe[utensils_attributes][0][qty]').prop('id', 'recipe_utensils_attributes_0_qty');
+    $(elem).parent().parent().find('input[id$="_name"]').val('').prop('name', 'recipe[utensils_attributes][0][name]').prop('id', 'recipe_utensils_attributes_0_name');
+  } else {
+    num = $(elem).parent().children('input[type="hidden"]').val();
+    id = $('#recipe_utensils_attributes_' + (parseInt(num) - 1) + '_id').val();
+    if(id == undefined) {
+      $(elem).parent().parent().remove();
+    } else {
+      $.ajax({
+        url: '/recipes/' + rid + '/utensils/' + id + '.json',
+        type: 'DELETE',
+        success: data => {
+          $('#recipe_utensils_attributes_' + (parseInt(num) - 1) + '_id').remove();
+          $(elem).parent().parent().remove();
+        }
+      });
+    }
+  }
+}
 
 function addCategory() {
   category = $('#category_name').val();
