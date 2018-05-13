@@ -84,7 +84,7 @@ RSpec.describe RecipesController, type: :controller do
       sign_in user
       @recipe = FactoryBot.create(:recipe)
       get :edit, params: { id: @recipe.id }
-      assert_redirected_to root_path
+      assert_redirected_to recipes_path
     end
   end
 

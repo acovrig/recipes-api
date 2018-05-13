@@ -30,7 +30,7 @@ class RecipesController < ApplicationController
 
   # GET /recipes/1/edit
   def edit
-    redirect_to root_path and return if @recipe.author != current_user
+    redirect_to recipes_path, flash: {alert: 'You do not have permission to edit that recipe.'} and return if @recipe.author != current_user
   end
 
   # POST /recipes
