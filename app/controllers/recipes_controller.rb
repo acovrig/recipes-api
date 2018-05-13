@@ -10,6 +10,8 @@ class RecipesController < ApplicationController
     else
       @recipes = Recipe.public_recipes
     end
+    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
   end
 
   # GET /recipes/1

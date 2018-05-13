@@ -6,6 +6,45 @@ RSpec.describe RecipesController, type: :controller do
       get :index
       expect(response).to be_success
     end
+    it 'returns a success with login' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      get :index
+      expect(response).to be_success
+    end
+  end
+
+  context 'GET #show' do
+    it 'returns a success' do
+      recipe = FactoryBot.create(:recipe, privacy: 'public')
+      get :show, params: { id: recipe.id }
+      expect(response).to be_success
+    end
+    it 'succeeds with a public recipe' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      recipe = FactoryBot.create(:recipe, privacy: 'public')
+      get :show, params: { id: recipe.id }
+      expect(response).to be_success
+    end
+    it 'succeeds with an internal recipe' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      recipe = FactoryBot.create(:recipe, privacy: 'internal')
+      get :show, params: { id: recipe.id }
+      expect(response).to be_success
+    end
+    it 'fails with a private recipe I do not own' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      recipe = FactoryBot.create(:recipe, privacy: 'private')
+      get :show, params: { id: recipe.id }
+      assert_redirected_to recipes_path
+    end
   end
 
   context 'GET #new' do

@@ -74,6 +74,22 @@ RSpec.describe UtensilsController, type: :controller do
     end
   end
 
+  context 'GET #search' do
+    it 'returns success' do
+      @utensil = FactoryBot.create(:utensil)
+      get :search, params: { q: @utensil.name }
+      expect(response).to be_success
+    end
+    it 'returns success logged in' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      @utensil = FactoryBot.create(:utensil)
+      get :search, params: { q: @utensil.name }
+      expect(response).to be_success
+    end
+  end
+
   context 'POST #create' do
     it 'requires login' do
       @utensil = FactoryBot.build(:utensil)

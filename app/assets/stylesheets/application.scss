@@ -1,3 +1,22 @@
 @import "bootstrap";
 @import "font-awesome";
 @import "recipes";
+
+#paginate-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 0px) and (max-width: 574px) {
+  .desktop { display: none; }
+  .tablet { display: none; }
+}
+@media screen and (min-width: 575px) and (max-width: 766px) {
+  .desktop { display: none; }
+}
+@media screen and (min-width: 767px) and (max-width: 990px) {
+  .mobile { display: none; }
+}
+@media screen and (min-width: 992px) {
+  .mobile { display: none; }
+}
