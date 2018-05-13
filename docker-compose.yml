@@ -20,12 +20,12 @@ services:
     volumes:
       - .:/src
     ports:
-      - 3000/tcp
+      - 3000:3000
 
   pma:
     image: phpmyadmin/phpmyadmin
     restart: "no"
     ports:
-      - 80/tcp
+      - 8080:80/tcp
     links:
       - mysql:db
