@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   def index
-  end
+  end # index
 
   def search
     @q = params[:search]
@@ -22,5 +22,18 @@ class HomeController < ApplicationController
       format.html {}
       format.json { render json: @results and return }
     end
-  end
+  end # search
+
+  def author
+    @user = User.find_by(id: params[:id])
+    redirect_to root_path, flash: { alert: "Author #{params[:id]} not found." } and return if @user.nil?
+    @recipes = Recipe.where(author: @user)
+    if user_signed_in?
+      @recipes = @recipes.where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
+    else
+      @recipes = @recipes.where(privacy: 'public')
+    end
+    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
+  end # author
 end

@@ -23,7 +23,13 @@
     <% @recipes.each do |recipe| %>
       <tr>
         <td><%= link_to recipe.name, recipe %></td>
-        <td><%= recipe.author.name %></td>
+        <td>
+          <% if controller_name == 'home' and action_name == 'author' %>
+            <%= recipe.author.name %>
+          <% else %>
+            <%= link_to recipe.author.name, author %>
+          <% end %>
+        </td>
         <td class="tablet"><%= recipe.serving_size %></td>
         <td class="tablet"><%= recipe.serving_suggestion %></td>
         <td class="desktop"><%= recipe.rating %></td>
