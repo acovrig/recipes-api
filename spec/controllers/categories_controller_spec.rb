@@ -49,6 +49,22 @@ RSpec.describe CategoriesController, type: :controller do
     end
   end
 
+  context 'GET #show' do
+    it 'returns success' do
+      @category = FactoryBot.create(:category)
+      get :show, params: { id: @category.id }
+      expect(response).to be_success
+    end
+    it 'returns success with login' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      @category = FactoryBot.create(:category, created_by: user)
+      get :show, params: { id: @category.id }
+      expect(response).to be_success
+    end
+  end
+
   context 'POST #create' do
     it 'requires login' do
       @category = FactoryBot.build(:category)

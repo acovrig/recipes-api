@@ -49,6 +49,22 @@ RSpec.describe IngredientsController, type: :controller do
     end
   end
 
+  context 'GET #search' do
+    it 'returns success' do
+      @ingredient = FactoryBot.create(:ingredient)
+      get :search, params: { q: @ingredient.item }
+      expect(response).to be_success
+    end
+    it 'returns success logged in' do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      sign_in user
+      @ingredient = FactoryBot.create(:ingredient)
+      get :search, params: { q: @ingredient.item }
+      expect(response).to be_success
+    end
+  end
+
   context 'GET #edit' do
     it 'requires login' do
       @ingredient = FactoryBot.create(:ingredient)
