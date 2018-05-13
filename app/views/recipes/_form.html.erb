@@ -53,7 +53,7 @@
       <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
         <tr>
           <td><%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %></td>
-          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup' %></td>
+          <td><%= dir.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %></td>
           <td><%= dir.text_field :item, class: 'form-control', required: true, placeholder: 'salsa' %></td>
           <td><%= dir.text_field :note, class: 'form-control', placeholder: 'Mild recommended, change to taste' %></td>
           <td><button class="btn btn-danger btn-sm" type="button" onClick="delIngredient(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button></td>
