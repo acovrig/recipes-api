@@ -60,7 +60,7 @@ function addIngredient() {
 }
 
 function delIngredient(rid, elem) {
-  if($(elem).parent().parent().children().length < 3) {
+  if($(elem).parent().parent().parent().children().length < 4) {
     $(elem).parent().parent().find('input[id$="_qty"]').val('').prop('name', 'recipe[ingredients_attributes][0][qty]').prop('id', 'recipe_ingredients_attributes_0_qty');
     $(elem).parent().parent().find('input[id$="_unit"]').val('').prop('name', 'recipe[ingredients_attributes][0][unit]').prop('id', 'recipe_ingredients_attributes_0_unit');
     $(elem).parent().parent().find('input[id$="_item"]').val('').prop('name', 'recipe[ingredients_attributes][0][item]').prop('id', 'recipe_ingredients_attributes_0_item');
@@ -94,7 +94,7 @@ function addUtensil() {
 }
 
 function delUtensil(rid, elem) {
-  if($(elem).parent().parent().children().length < 3) {
+  if($(elem).parent().parent().parent().children().length < 4) {
     $(elem).parent().parent().find('input[id$="_qty"]').val('').prop('name', 'recipe[utensils_attributes][0][qty]').prop('id', 'recipe_utensils_attributes_0_qty');
     $(elem).parent().parent().find('input[id$="_name"]').val('').prop('name', 'recipe[utensils_attributes][0][name]').prop('id', 'recipe_utensils_attributes_0_name');
   } else {
