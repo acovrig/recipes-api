@@ -7,16 +7,24 @@
   </div>
   <div>
     <table class="table-hover" id="recipe_info">
-      <tr>
-        <td>Serving Size</td>
-        <td><%= @recipe.serving_size %></td>
-      </tr><tr>
-        <td>Serving Suggestion</td>
-        <td><%= @recipe.serving_suggestion %></td>
-      </tr><tr>
-        <td>Rating</td>
-        <td><%= @recipe.rating %></td>
-      </tr>
+      <% if @recipe.serving_size %>
+        <tr>
+          <td>Serving Size</td>
+          <td><%= @recipe.serving_size %></td>
+        </tr>
+      <% end %>
+      <% if @recipe.serving_suggestion %>
+        <tr>
+          <td>Serving Suggestion</td>
+          <td><%= @recipe.serving_suggestion %></td>
+        </tr>
+      <% end %>
+      <% if @recipe.rating %>
+        <tr>
+          <td>Rating</td>
+          <td><%= @recipe.rating %></td>
+        </tr>
+      <% end %>
     </table>
   </div>
 </div>
