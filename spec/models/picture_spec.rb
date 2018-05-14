@@ -7,19 +7,6 @@ RSpec.describe Picture, type: :model do
       expect(picture.valid?).to eq(false)
     end
 
-    it 'requires a fname' do
-      picture = FactoryBot.build(:picture, fname: nil)
-      expect(picture.valid?).to eq(false)
-    end
-
-    it 'requires a unique fname' do
-      recipe = FactoryBot.create(:recipe)
-      fname = FactoryBot.build(:picture).fname
-      FactoryBot.create(:picture, recipe: recipe, fname: fname)
-      picture = FactoryBot.build(:picture, recipe: recipe, fname: fname)
-      expect(picture.valid?).to eq(false)
-    end
-
     it 'requires a sum' do
       picture = FactoryBot.build(:picture, sum: nil)
       expect(picture.valid?).to eq(false)

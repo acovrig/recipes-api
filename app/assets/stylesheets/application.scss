@@ -20,3 +20,12 @@
 @media screen and (min-width: 992px) {
   .mobile { display: none; }
 }
+
+#gallery img {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+#gallery img:hover {
+  filter: none; /* IE6-9 */
+  -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */
+}

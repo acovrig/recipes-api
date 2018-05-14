@@ -85,7 +85,8 @@ RSpec.describe PicturesController, type: :controller do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in @recipe.author
       @picture = FactoryBot.build(:picture, recipe: @recipe)
-      post :create, params: { recipe_id: @recipe.id, picture: @picture.attributes }
+      pic = Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'images', 'test_image.jpg'), 'image/jpeg')
+      post :create, params: { recipe_id: @recipe.id, picture: {pic: pic, caption: @picture.caption} }
       expect(response.status).to eq(302)
     end
 
@@ -97,21 +98,13 @@ RSpec.describe PicturesController, type: :controller do
       post :create, params: { recipe_id: @recipe.id, picture: @picture.attributes }
       expect(response.status).to eq(302)
     end
-
-    it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @recipe.author
-      @picture = FactoryBot.build(:picture).attributes.except('fname')
-      post :create, params: { recipe_id: @recipe.id, picture: @picture }
-      expect(response).to be_success
-    end
   end
 
   context 'PUT #update' do
     it 'requires login' do
       @picture = FactoryBot.create(:picture)
       @picture2 = FactoryBot.build(:picture, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {fname: @picture2.fname } }
+      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {caption: @picture2.caption } }
       assert_redirected_to new_user_session_path
     end
 
@@ -120,7 +113,7 @@ RSpec.describe PicturesController, type: :controller do
       sign_in @recipe.author
       @picture = FactoryBot.create(:picture, recipe: @recipe)
       @picture2 = FactoryBot.build(:picture, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {fname: @picture2.fname } }
+      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {caption: @picture2.caption } }
       assert_redirected_to recipe_picture_path(@recipe, @picture)
     end
 
@@ -130,17 +123,8 @@ RSpec.describe PicturesController, type: :controller do
       sign_in user
       @picture = FactoryBot.create(:picture, recipe: @recipe)
       @picture2 = FactoryBot.build(:picture, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {fname: @picture2.fname } }
+      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {caption: @picture2.caption } }
       assert_redirected_to recipes_path
-    end
-
-    it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in @recipe.author
-      @picture = FactoryBot.create(:picture, recipe: @recipe)
-      @picture2 = FactoryBot.create(:picture, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @picture.id, picture: {fname: @picture2.fname } }
-      expect(response).to be_success
     end
   end
 
@@ -156,7 +140,7 @@ RSpec.describe PicturesController, type: :controller do
       sign_in @recipe.author
       @picture = FactoryBot.create(:picture, recipe: @recipe)
       delete :destroy, params: { recipe_id: @recipe.id, id: @picture.id }
-      assert_redirected_to recipe_pictures_path(@recipe)
+      assert_redirected_to recipe_path(@recipe)
     end
 
     it 'works with login (not my recipe)' do

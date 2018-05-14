@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
 
   has_many :recipes, foreign_key: 'author_id'
+  has_many :pictures, foreign_key: 'uploaded_by_id'
 
   validates :name, presence: true
 

@@ -7,6 +7,7 @@ class CreatePictures < ActiveRecord::Migration[5.1]
       t.integer :width, null: false
       t.integer :height, null: false
       t.integer :size
+      t.string :caption
 
       t.timestamps
     end

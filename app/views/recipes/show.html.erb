@@ -1,20 +1,33 @@
 <p id="notice"><%= notice %></p>
 
-<table class="float-right table-hover" id="recipe_info">
-  <tr>
-    <td style="text-align: center;">Serving Size</td>
-    <td><%= @recipe.serving_size %></td>
-  </tr><tr>
-    <td style="text-align: center;">Serving Suggestion</td>
-    <td><%= @recipe.serving_suggestion %></td>
-  </tr><tr>
-    <td style="text-align: center;">Rating</td>
-    <td><%= @recipe.rating %></td>
-  </tr>
-</table>
-
-<h2><%= @recipe.name %></h2>
-<span>by <%= @recipe.author.name %></span>
+<div class="flex-container">
+  <div>
+    <h2><%= @recipe.name %></h2>
+    <span>by <%= @recipe.author.name %></span>
+  </div>
+  <div>
+    <table class="table-hover" id="recipe_info">
+      <% if @recipe.serving_size %>
+        <tr>
+          <td>Serving Size</td>
+          <td><%= @recipe.serving_size %></td>
+        </tr>
+      <% end %>
+      <% if @recipe.serving_suggestion %>
+        <tr>
+          <td>Serving Suggestion</td>
+          <td><%= @recipe.serving_suggestion %></td>
+        </tr>
+      <% end %>
+      <% if @recipe.rating %>
+        <tr>
+          <td>Rating</td>
+          <td><%= @recipe.rating %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
 
 <h2>Categories:</h2>
 <ul>
@@ -37,14 +50,22 @@
   <% end %>
 </ul>
 
+<h2>Pictures:</h2>
 <% if @recipe.pictures.length > 0 %>
-  <h2>Pictures:</h2>
-  <ul>
+  <div id="gallery">
     <% @recipe.pictures.each do |pic| %>
-      <li><%= pic.fname %></li>
+      <div>
+        <a href="#" data-toggle="modal" data-target="#pic<%= pic.id %>">
+          <%= image_tag pic.pic.url(:thmb) %><br>
+          <span><%= pic.caption %></span>
+        </a>
+      </div>
     <% end %>
-  </ul>
+  </div>
+<% else %>
+  No pictures have been uploaded,
 <% end %>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">Add Picture</button>
 
 <h2>Directions:</h2>
 <ol>
@@ -55,3 +76,51 @@
 
 <%= link_to 'Edit', edit_recipe_path(@recipe) %> |
 <%= link_to 'Back', recipes_path %>
+
+<% @recipe.pictures.each do |pic| %>
+  <div class="modal fade" id="<%= "pic#{pic.id}" %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <%= link_to fa_icon('trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' %>
+          <h4 class="modal-title" id="myLargeModalLabel-1"><%= pic.caption %></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+          <%= link_to (image_tag pic.pic.url(:medium), style: 'max-width: 100%;'), pic.pic.url, target: '_BLANK' %><br>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal image -->
+<% end %>
+
+<!-- uploadModal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Add Picture</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <%= form_for @picture, url: recipe_pictures_path(@recipe), html: { multipart: true } do |form| %>
+        <div class="modal-body">
+          <div class="form-inline">
+            <%= form.label :caption %>
+            <%= form.text_field :caption, class: 'form-control' %>
+          </div><br>
+          <div class="form-inline">
+            <%= form.label :pic %>
+            <%= form.file_field :pic, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= form.submit 'Save Picture', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
