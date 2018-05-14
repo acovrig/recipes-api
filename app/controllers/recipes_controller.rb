@@ -18,6 +18,7 @@ class RecipesController < ApplicationController
   # GET /recipes/1.json
   def show
     redirect_to recipes_path, flash: { alert: "You are not permitted to see recipe #{@recipe.id}" } and return if @recipe.privacy == 'private' and @recipe.author != current_user
+    @picture = Picture.new
   end
 
   # GET /recipes/new

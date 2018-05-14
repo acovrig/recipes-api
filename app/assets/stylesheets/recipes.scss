@@ -17,4 +17,24 @@ table#recipe_info td, table#recipe_info th {
   border-collapse: collapse;
   border: 2px solid black;
   padding: 7px;
+  text-align: center;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#gallery {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  div {
+    max-width: 100px;
+    text-align: center;
+    margin: 5px;
+    // border: 2px solid black;
+    // border-radius: 5px;
+    // box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 }

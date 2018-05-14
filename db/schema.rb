@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180216025541) do
+ActiveRecord::Schema.define(version: 20180514002243) do
 
   create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(version: 20180216025541) do
 
   create_table "pictures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "recipe_id"
-    t.string "fname", null: false
     t.string "sum", null: false
     t.integer "width", null: false
     t.integer "height", null: false
@@ -61,7 +60,13 @@ ActiveRecord::Schema.define(version: 20180216025541) do
     t.string "caption"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "pic_file_name"
+    t.string "pic_content_type"
+    t.integer "pic_file_size"
+    t.datetime "pic_updated_at"
+    t.bigint "uploaded_by_id"
     t.index ["recipe_id"], name: "index_pictures_on_recipe_id"
+    t.index ["uploaded_by_id"], name: "fk_rails_5749680f63"
   end
 
   create_table "recipe_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -120,6 +125,7 @@ ActiveRecord::Schema.define(version: 20180216025541) do
   add_foreign_key "ingredients", "recipes"
   add_foreign_key "notes", "recipes"
   add_foreign_key "pictures", "recipes"
+  add_foreign_key "pictures", "users", column: "uploaded_by_id"
   add_foreign_key "recipe_categories", "categories"
   add_foreign_key "recipe_categories", "recipes"
   add_foreign_key "recipes", "users", column: "author_id"

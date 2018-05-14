@@ -31,3 +31,4 @@
 
 mysql/
 coverage/*
+public/system/*
