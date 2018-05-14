@@ -46,6 +46,7 @@
   <div class="collapse" id="collapseIngredients">
     <%= form.fields_for :ingredients, @recipe.ingredients do |dir| %>
       <div class="card">
+        <%= dir.hidden_field :id unless @recipe.id.nil? %>
         <div class="card-body">
           <div class="card-title">Qty</div>
           <div class="card-text">
@@ -80,10 +81,11 @@
   <div class="collapse" id="collapseUtensils">
     <%= form.fields_for :utensils, @recipe.utensils do |dir| %>
       <div class="card">
+        <%= dir.hidden_field :id unless @recipe.id.nil? %>
         <div class="card-body">
           <div class="card-title">Qty</div>
           <div class="card-text">
-            <%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+            <%= dir.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1', required: true %>
           </div>
           <div class="card-title">Name</div>
           <div class="card-text">
@@ -108,8 +110,9 @@
       <%= form.fields_for :directions, @recipe.directions do |dir| %>
         <li>
           <div class="form-inline">
+            <%= dir.hidden_field :id unless @recipe.id.nil? %>
             <%= dir.hidden_field :step %>
-            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline', placeholder: 'Mix dry ingredients together' %>
+            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline', placeholder: 'Mix dry ingredients together', required: true %>
             <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button>
           </div>
         </li>
