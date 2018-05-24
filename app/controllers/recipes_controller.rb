@@ -19,6 +19,8 @@ class RecipesController < ApplicationController
   def show
     redirect_to recipes_path, flash: { alert: "You are not permitted to see recipe #{@recipe.id}" } and return if @recipe.privacy == 'private' and @recipe.author != current_user
     @picture = Picture.new
+    @ingredient = Ingredient.new(recipe: @recipe)
+    @utensil = Utensil.new(recipe: @recipe)
   end
 
   # GET /recipes/new
