@@ -140,7 +140,7 @@ RSpec.describe PicturesController, type: :controller do
       sign_in @recipe.author
       @picture = FactoryBot.create(:picture, recipe: @recipe)
       delete :destroy, params: { recipe_id: @recipe.id, id: @picture.id }
-      assert_redirected_to recipe_path(@recipe)
+      assert_redirected_to edit_recipe_path(@recipe)
     end
 
     it 'works with login (not my recipe)' do
