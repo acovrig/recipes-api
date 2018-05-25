@@ -1,5 +1,5 @@
 <p id="notice"><%= notice %></p>
-
+<%= hidden_field_tag :rid, @recipe.id %>
 <div class="flex-container">
   <div>
     <h2><%= @recipe.name %></h2>
@@ -7,50 +7,88 @@
   </div>
   <div>
     <table class="table-hover" id="recipe_info">
-      <% if @recipe.serving_size %>
+      <% if @recipe.serving_size or action_name == 'edit' %>
         <tr>
           <td>Serving Size</td>
-          <td><%= @recipe.serving_size %></td>
+          <% if action_name == 'edit' %>
+            <td><%= number_field_tag :serving_size, @recipe.serving_size, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
+          <% else %>
+            <td><%= @recipe.serving_size %></td>
+          <% end %>
         </tr>
       <% end %>
-      <% if @recipe.serving_suggestion %>
+      <% if @recipe.serving_suggestion or action_name == 'edit' %>
         <tr>
           <td>Serving Suggestion</td>
-          <td><%= @recipe.serving_suggestion %></td>
+          <% if action_name == 'edit' %>
+            <td><%= text_field_tag :serving_suggestion, @recipe.serving_suggestion, class: 'form-control', onblur: "editRecipe(this);" %></td>
+          <% else %>
+            <td><%= @recipe.serving_suggestion %></td>
+          <% end %>
         </tr>
       <% end %>
-      <% if @recipe.rating %>
+      <% if @recipe.rating or action_name == 'edit' %>
         <tr>
           <td>Rating</td>
-          <td><%= @recipe.rating %></td>
+          <% if action_name == 'edit' %>
+            <td><%= number_field_tag :rating, @recipe.rating, step: 'any', max: 10, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
+          <% else %>
+            <td><%= @recipe.rating %></td>
+          <% end %>
         </tr>
       <% end %>
     </table>
   </div>
 </div>
 
-<h2>Categories: <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= fa_icon 'plus' %></button></h2>
-<ul>
+<h2>Categories:
+  <% if action_name == 'edit' %>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#categoriesModal"><%= fa_icon 'pencil' %></button>
+  <% end %>
+</h2>
+<ul id="categories">
   <% @recipe.categories.each do |cat| %>
     <li><%= cat.name %></li>
   <% end %>
 </ul>
 
-<h2>Ingredients: <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ingredientsModal"><%= fa_icon 'plus' %></button></h2>
-<ul>
+<h2>Ingredients:
+  <% if action_name == 'edit' %>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ingredientsModal"><%= fa_icon 'plus' %></button>
+  <% end %>
+</h2>
+<ul id="ingredients">
   <% @recipe.ingredients.each do |ing| %>
-    <li><%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %></li>
+    <li id="ingredient<%= ing.id %>">
+      <% if action_name == 'edit' %>
+        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= "#{@recipe.id}, #{ing.id}" %>)"><%= fa_icon 'trash' %></button>
+      <% end %>
+      <%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %>
+    </li>
   <% end %>
 </ul>
 
-<h2>Utensils: <button type="button" class="btn btn-success" data-toggle="modal" data-target="#utensilsModal"><%= fa_icon 'plus' %></button></h2>
+<h2>Utensils:
+  <% if action_name == 'edit' %>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#utensilsModal"><%= fa_icon 'plus' %></button>
+  <% end %>
+</h2>
 <ul id="utensils">
   <% @recipe.utensils.each do |util| %>
-    <li><%= util.qty %> <%= util.name %></li>
+    <li id="utensil<%= util.id %>">
+      <% if action_name == 'edit' %>
+        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= "#{@recipe.id}, #{util.id}" %>)"><%= fa_icon 'trash' %></button>
+      <% end %>
+      <%= util.qty %> <%= util.name %>
+    </li>
   <% end %>
 </ul>
 
-<h2>Pictures: <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= fa_icon 'plus' %></button></h2>
+<h2>Pictures:
+  <% if action_name == 'edit' %>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= fa_icon 'plus' %></button>
+  <% end %>
+</h2>
 <% if @recipe.pictures.length > 0 %>
   <div id="gallery">
     <% @recipe.pictures.each do |pic| %>
@@ -64,15 +102,28 @@
   </div>
 <% end %>
 
-<h2>Directions: <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= fa_icon 'plus' %></button></h2>
-<ol>
+<h2>Directions:
+  <% if action_name == 'edit' %>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#directionsModal"><%= fa_icon 'plus' %></button>
+  <% end %>
+</h2>
+<ol id="directions">
   <% @recipe.directions.each do |dir| %>
-    <li><%= dir.action %></li>
+    <li id="direction<%= dir.id %>">
+      <% if action_name == 'edit' %>
+        <button type="button" class="btn btn-danger" onclick="delDirection(<%= "#{@recipe.id}, #{dir.id}" %>)"><%= fa_icon 'trash' %></button>
+      <% end %>
+      <%= dir.action %>
+    </li>
   <% end %>
 </ol>
 
-<%= link_to 'Edit', edit_recipe_path(@recipe) %> |
-<%= link_to 'Back', recipes_path %>
+<% if action_name == 'edit' %>
+  <%= link_to 'Back', recipe_path(@recipe) %>
+<% else %>
+  <%= link_to 'Back', recipes_path %> |
+  <%= link_to 'Edit', edit_recipe_path(@recipe) %>
+<% end %>
 
 <% @recipe.pictures.each do |pic| %>
   <div class="modal fade" id="<%= "pic#{pic.id}" %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
@@ -80,7 +131,7 @@
       <div class="modal-content">
 
         <div class="modal-header">
-          <%= link_to fa_icon('trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' %>
+          <%= link_to fa_icon('trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' if action_name == 'edit' %>
           <h4 class="modal-title" id="myLargeModalLabel-1"><%= pic.caption %></h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
@@ -92,100 +143,147 @@
   </div><!-- /.modal image -->
 <% end %>
 
-<!-- ingredientsModal -->
-<div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="ingredientsModalLabel">Add Ingredient</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <%= form_for @ingredient, {url: recipe_ingredients_path(@recipe)} do |form| %>
-        <div class="card-body">
-          <div class="card-title">Qty</div>
-          <div class="card-text">
-            <%= form.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
-          </div>
-          <div class="card-title">Unit</div>
-          <div class="card-text">
-            <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %>
-          </div>
-          <div class="card-title">Item</div>
-          <div class="card-text">
-            <%= form.text_field :item, class: 'form-control', required: true, placeholder: 'salsa' %>
-          </div>
-          <div class="card-title">Note</div>
-          <div class="card-text">
-            <%= form.text_field :note, class: 'form-control', placeholder: 'Mild recommended, change to taste' %>
-          </div>
+<% if action_name == 'edit' %>
+  <!-- categoriesModal -->
+  <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ingredientsModalLabel">Add Category</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <select class="custom-select" id="cid" multiple></select>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= form.submit 'Save Ingredient', class: 'btn btn-primary' %>
+          <button type="button" class="btn btn-primary" onClick="editCategories()">Save categories</button>
         </div>
-      <% end %>
-    </div>
-  </div>
-</div>
-<a href="#" id="testing">test</a>
-<!-- utensilsModal -->
-<div class="modal fade" id="utensilsModal" tabindex="-1" role="dialog" aria-labelledby="utensilsModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="utensilsModalLabel">Add Ingredient</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
-      <%= form_tag nil, onsubmit: "return addUtensil(#{@recipe.id}, event)" do |form| %>
-        <div class="card-body"><div class="card-body">
-          <div class="card-title">Qty</div>
-          <div class="card-text">
-            <%= number_field_tag :qty, nil, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1', required: true %>
-          </div>
-          <div class="card-title">Name</div>
-          <div class="card-text">
-            <%= text_field_tag :name, nil, class: 'form-control', required: true, placeholder: 'crockpot' %>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= submit_tag 'Save Utensil', class: 'btn btn-primary' %>
-        </div>
-      <% end %>
     </div>
   </div>
-</div>
 
-<!-- uploadModal -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Add Picture</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <%= form_for @picture, url: recipe_pictures_path(@recipe), html: { multipart: true } do |form| %>
-        <div class="modal-body">
-          <div class="form-inline">
-            <%= form.label :caption %>
-            <%= form.text_field :caption, class: 'form-control' %>
-          </div><br>
-          <div class="form-inline">
-            <%= form.label :pic %>
-            <%= form.file_field :pic, class: 'form-control' %>
+  <!-- ingredientsModal -->
+  <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="ingredientsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ingredientsModalLabel">Add Ingredient</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_for @ingredient, {url: recipe_ingredients_path(@recipe), html: {onsubmit: "return addIngredient(event)"}} do |form| %>
+          <div class="card-body">
+            <div class="card-title">Qty</div>
+            <div class="card-text">
+              <%= form.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+            </div>
+            <div class="card-title">Unit</div>
+            <div class="card-text">
+              <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %>
+            </div>
+            <div class="card-title">Item</div>
+            <div class="card-text">
+              <%= form.text_field :item, class: 'form-control', required: true, placeholder: 'salsa' %>
+            </div>
+            <div class="card-title">Note</div>
+            <div class="card-text">
+              <%= form.text_field :note, class: 'form-control', placeholder: 'Mild recommended, change to taste' %>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= form.submit 'Save Picture', class: 'btn btn-primary' %>
-        </div>
-      <% end %>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= form.submit 'Save Ingredient', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- utensilsModal -->
+  <div class="modal fade" id="utensilsModal" tabindex="-1" role="dialog" aria-labelledby="utensilsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="utensilsModalLabel">Add Utensil</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_for @utensil, {url: recipe_utensils_path(@recipe), html: {onsubmit: "return addUtensil(event)"}} do |form| %>
+          <div class="card-body">
+            <div class="card-title">Qty</div>
+            <div class="card-text">
+              <%= form.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1', required: true %>
+            </div>
+            <div class="card-title">Name</div>
+            <div class="card-text">
+              <%= form.text_field :name, class: 'form-control', required: true, placeholder: 'crockpot' %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= submit_tag 'Save Utensil', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- uploadModal -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Add Picture</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_for @picture, url: recipe_pictures_path(@recipe), html: { multipart: true } do |form| %>
+          <div class="modal-body">
+            <div class="form-inline">
+              <%= form.label :caption %>
+              <%= form.text_field :caption, class: 'form-control' %>
+            </div><br>
+            <div class="form-inline">
+              <%= form.label :pic %>
+              <%= form.file_field :pic, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= form.submit 'Save Picture', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- directionsModal -->
+  <div class="modal fade" id="directionsModal" tabindex="-1" role="dialog" aria-labelledby="directionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="utensilsModalLabel">Add Step</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <%= form_for @direction, {url: recipe_directions_path(@recipe), html: {onsubmit: "return addDirection(event)"}} do |form| %>
+          <div class="card-body">
+            <div class="card-title">Step</div>
+            <div class="card-text">
+              <%= form.text_field :action, class: 'form-control', placeholder: 'Mix dry ingredients together', required: true %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= submit_tag 'Save Direction', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

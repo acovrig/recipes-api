@@ -12,7 +12,9 @@
   <% end %>
 
   <div class="form-group">
-    <%= form.label :name %>
+    <%= form.label :name do %>
+    Name (required)
+    <% end %>
     <%= form.text_field :name, id: :recipe_name, class: 'form-control', required: true, placeholder: 'The Megalodon Casserole' %>
   </div>
 
@@ -31,30 +33,6 @@
     <%= form.text_field :rating, id: :recipe_rating, class: 'form-control', placeholder: '10' %>
   </div>
 
-  <h2>Directions</h2>
-  <button class="btn btn-primary collapsed" type="button" data-toggle="collapse" data-target="#collapseDirections">
-    <span class="if-collapsed">Expand</span>
-    <span class="if-not-collapsed">Collapse</span>
-  </button><br><br>
-  <div class="collapse" id="collapseDirections">
-    <ol>
-      <%= form.fields_for :directions, @recipe.directions do |dir| %>
-        <li>
-          <div class="form-inline">
-            <%= dir.hidden_field :id unless @recipe.id.nil? %>
-            <%= dir.hidden_field :step %>
-            <%= dir.text_field :action, class: 'form-control', style: 'width: calc(100% - 4em); display: inline', placeholder: 'Mix dry ingredients together', required: true %>
-            <button class="btn btn-danger btn-sm" type="button" onClick="delStep(<%= (@recipe.id.nil? ? 'undefined' : @recipe.id) %>, this)"><%= fa_icon 'trash' %></button>
-          </div>
-        </li>
-      <% end %>
-    </ol><br>
-    <div class="float-right">
-      <button type="button" class="btn btn-default" onClick="addStep();">Add Step</button>
-    </div>
-  </div>
-
-  <br><br>
   <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>
 <% end %>
 

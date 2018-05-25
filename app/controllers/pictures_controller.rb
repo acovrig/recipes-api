@@ -65,7 +65,7 @@ class PicturesController < ApplicationController
   def destroy
     @picture.destroy
     respond_to do |format|
-      format.html { redirect_to recipe_path(@recipe), notice: 'Picture was successfully destroyed.' }
+      format.html { redirect_to edit_recipe_path(@recipe), notice: 'Picture was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

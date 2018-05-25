@@ -28,10 +28,11 @@ class DirectionsController < ApplicationController
   def create
     @direction = Direction.new(direction_params)
     @direction.recipe = @recipe
+    @direction.step = @recipe.directions.order(step: :asc).last.id + 1 if @direction.step.nil?
     respond_to do |format|
       if @direction.save
         format.html { redirect_to recipe_direction_path(@recipe, @direction), notice: 'Direction was successfully created.' }
-        format.json { render :show, status: :created, location: @direction }
+        format.json { render json: @direction }
       else
         format.html { render :new }
         format.json { render json: @direction.errors, status: :unprocessable_entity }

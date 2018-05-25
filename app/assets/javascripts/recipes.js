@@ -1,105 +1,75 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(document).ready(_ => {
-  $('#addCategoryModal').on('shown.bs.modal', function () {
-    $('#category_name').trigger('focus');
-  });
-  $('input[type="submit"]').on('click', function() {
-    $('button.btn-primary[data-toggle="collapse"]').each((i, btn) => {
-      if(!$($(btn).attr('data-target')).hasClass('show')) {
-        $(btn).click();
+document.addEventListener('turbolinks:load', _ => {
+  $('#categoriesModal').on('shown.bs.modal', function () {
+    $.ajax({
+      url: '/categories.json?rid=' + $('#rid').val(),
+      success: data => {
+        $('select#cid').empty();
+        data.all.forEach(cat => {
+          $('select#cid').append('<option value=' + cat.id + '>' + cat.name + '</option>');
+        });
+        $('select#cid').val(data.match);
       }
-    });
+		});
+  });
+  $('#ingredientsModal').on('shown.bs.modal', function () {
+    $('#ingredient_qty').trigger('focus');
+  });
+  $('#utensilsModal').on('shown.bs.modal', function () {
+    $('#utensil_name').trigger('focus');
+  });
+  $('#directionsModal').on('shown.bs.modal', function () {
+    $('#direction_action').trigger('focus');
   });
 });
 
-function delStep(rid, elem) {
-  if($(elem).parent().parent().parent().children().length < 2) {
-    $(elem).parent().children('input[type="hidden"]').val('1').prop('name', 'recipe[directions_attributes][0][step]').prop('id', 'recipe_directions_attributes_0_step');
-    $(elem).parent().children('input[type="text"]').val('').prop('name', 'recipe[directions_attributes][0][action]').prop('id', 'recipe_directions_attributes_0_action');
-  } else {
-    num = $(elem).parent().children('input[type="hidden"]').val();
-    id = $('#recipe_directions_attributes_' + (parseInt(num) - 1) + '_id').val();
-    if(rid == undefined || id == undefined) {
-      $(elem).parent().parent().remove();
-    } else {
-      $.ajax({
-        url: '/recipes/' + rid + '/directions/' + id + '.json',
-        type: 'DELETE',
-        success: data => {
-          $('#recipe_directions_attributes_' + (parseInt(num) - 1) + '_id').remove();
-          $(elem).parent().parent().remove();
-        }
-      });
+function editRecipe(elem) {
+  form = {recipe: {}};
+  form['recipe'][elem.id] = elem.value;
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '.json',
+    type: 'PUT',
+    data: form,
+    success: data => {
+      console.log(data);
+    }, error: data => {
+      console.error(data);
     }
-  }
+  });
 }
 
-function delIngredient(rid, elem) {
-  if($(elem).parent().parent().parent().children().length < 4) {
-    $(elem).parent().parent().find('input[id$="_qty"]').val('').prop('name', 'recipe[ingredients_attributes][0][qty]').prop('id', 'recipe_ingredients_attributes_0_qty');
-    $(elem).parent().parent().find('input[id$="_unit"]').val('').prop('name', 'recipe[ingredients_attributes][0][unit]').prop('id', 'recipe_ingredients_attributes_0_unit');
-    $(elem).parent().parent().find('input[id$="_item"]').val('').prop('name', 'recipe[ingredients_attributes][0][item]').prop('id', 'recipe_ingredients_attributes_0_item');
-    $(elem).parent().parent().find('input[id$="_note"]').val('').prop('name', 'recipe[ingredients_attributes][0][note]').prop('id', 'recipe_ingredients_attributes_0_note');
-  } else {
-    num = $(elem).parent().children('input[type="hidden"]').val();
-    id = $('#recipe_ingredients_attributes_' + (parseInt(num) - 1) + '_id').val();
-    if(id == undefined) {
-      $(elem).parent().parent().remove();
-    } else {
-      $.ajax({
-        url: '/recipes/' + rid + '/ingredients/' + id + '.json',
-        type: 'DELETE',
-        success: data => {
-          $('#recipe_ingredients_attributes_' + (parseInt(num) - 1) + '_id').remove();
-          $(elem).parent().parent().remove();
-        }
+function editCategories() {
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/categories.json',
+    type: 'PUT',
+    data: {cid: $('#cid').val()},
+    success: data => {
+      $('ul#categories').empty();
+      data.forEach(cat => {
+        $('ul#categories').append('<li>' + cat.name + '</li>');
       });
+      $('#categoriesModal').modal('hide');
+    }, error: data => {
+      console.error(data);
     }
-  }
+  });
 }
 
-function delUtensil(rid, elem) {
-  if($(elem).parent().parent().parent().children().length < 4) {
-    $(elem).parent().parent().find('input[id$="_qty"]').val('').prop('name', 'recipe[utensils_attributes][0][qty]').prop('id', 'recipe_utensils_attributes_0_qty');
-    $(elem).parent().parent().find('input[id$="_name"]').val('').prop('name', 'recipe[utensils_attributes][0][name]').prop('id', 'recipe_utensils_attributes_0_name');
-  } else {
-    num = $(elem).parent().children('input[type="hidden"]').val();
-    id = $('#recipe_utensils_attributes_' + (parseInt(num) - 1) + '_id').val();
-    if(id == undefined) {
-      $(elem).parent().parent().remove();
-    } else {
-      $.ajax({
-        url: '/recipes/' + rid + '/utensils/' + id + '.json',
-        type: 'DELETE',
-        success: data => {
-          $('#recipe_utensils_attributes_' + (parseInt(num) - 1) + '_id').remove();
-          $(elem).parent().parent().remove();
-        }
-      });
-    }
-  }
-}
-
-function addUtensil(rid, e) {
+function addIngredient(e) {
   e.preventDefault();
   $.ajax({
-    url: '/recipes/' + rid + '/utensils.json',
+    url: '/recipes/' + $('#rid').val() + '/ingredients.json',
     type: 'POST',
-    data: {
-      utf8: $(e.srcElement).find('[name="utf8"]').val(),
-      authenticity_token: $(e.srcElement).find('[name="authenticity_token"]').val(),
-      utensil: {
-        name: $(e.srcElement).find('#name').val(),
-        qty: $(e.srcElement).find('#qty').val()
-      }
-    },
+    data: $(e.srcElement).serialize(),
     success: data => {
-      $('ul#utensils').append('<li>' + data.qty + ' ' + data.name + '</li>');
-      $('#utensilsModal').modal('hide');
-      $(e.srcElement).find('#name').val('');
-      $(e.srcElement).find('#qty').val('');
+      note = '';
+      if(data.note != '')
+        note = ' (' + data.note + ')';
+      $('ul#ingredients').append('<li id="ingredient' + data.id + '"><button type="button" class="btn btn-danger" onclick="delIngredient(' + data.id + ')"><i class="fa fa-trash"></i></button>' + data.qty + ' ' + data.unit + ' - ' + data.item + note + '</li>');
+      $('#ingredientsModal').modal('hide');
+      $(e.srcElement).trigger('reset');
       $(e.srcElement).find('input[type="submit"]').removeAttr('disabled');
       return true;
     }, error: data => {
@@ -108,4 +78,74 @@ function addUtensil(rid, e) {
     }
   });
   return false;
+}
+
+function delIngredient(id) {
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/ingredients/' + id + '.json',
+    type: 'DELETE',
+    success: data => {
+      $('#ingredient' + id).remove();
+    }
+  });
+}
+
+function addUtensil(e) {
+  e.preventDefault();
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/utensils.json',
+    type: 'POST',
+    data: $(e.srcElement).serialize(),
+    success: data => {
+      $('ul#utensils').append('<li id="utensil' + data.id + '"><button type="button" class="btn btn-danger" onclick="delUtensil(' + data.id + ')"><i class="fa fa-trash"></i></button>' + data.qty + ' ' + data.name + '</li>');
+      $('#utensilsModal').modal('hide');
+      $(e.srcElement).trigger('reset');
+      $(e.srcElement).find('input[type="submit"]').removeAttr('disabled');
+      return true;
+    }, error: data => {
+      console.error(data);
+      return false;
+    }
+  });
+  return false;
+}
+
+function delUtensil(id) {
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/utensils/' + id + '.json',
+    type: 'DELETE',
+    success: data => {
+      $('#utensil' + id).remove();
+    }
+  });
+}
+
+function addDirection(e) {
+  e.preventDefault();
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/directions.json',
+    type: 'POST',
+    data: $(e.srcElement).serialize(),
+    success: data => {
+      $('ol#directions').append('<li id="direction' + data.id + '"><button type="button" class="btn btn-danger" onclick="delDirection(' + data.id + ')"><i class="fa fa-trash"></i></button>' + data.action + '</li>');
+      $('#directionsModal').modal('hide');
+      $(e.srcElement).trigger('reset');
+      $(e.srcElement).find('input[type="submit"]').removeAttr('disabled');
+      return true;
+    }, error: data => {
+      console.error(data);
+      return false;
+    }
+  });
+  return false;
+}
+
+function delDirection(id) {
+  $.ajax({
+    url: '/recipes/' + $('#rid').val() + '/directions/' + id + '.json',
+    type: 'DELETE',
+    success: data => {
+      $('#direction' + id).remove();
+    }
+  });
 }

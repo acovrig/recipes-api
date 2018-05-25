@@ -7,6 +7,7 @@ class CategoriesController < ApplicationController
   def index
     @per_page = (params[:per_page] ? params[:per_page] : 50)
     @categories = Category.all.paginate(page: params[:page], per_page: @per_page)
+    render json: { all: @categories, match: Recipe.find(params[:rid]).categories.pluck(:id) } and return if params[:rid] =~ /\d+/
   end
 
   # GET /categories/1
