@@ -9,7 +9,7 @@ services:
       - ./mysql:/var/lib/mysql
 
   rails:
-    image: aaron/rails
+    image: reg.thecovrigs.net/acovrig/recipes:latest
     build: .
     restart: "no"
     user: "root"
