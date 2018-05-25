@@ -1,6 +1,6 @@
 class RecipesController < ApplicationController
   before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
-  before_action :set_recipe, only: [:show, :edit, :update, :destroy]
+  before_action :set_recipe, only: [:show, :edit, :update, :destroy, :categories]
 
   # GET /recipes
   # GET /recipes.json
@@ -18,20 +18,21 @@ class RecipesController < ApplicationController
   # GET /recipes/1.json
   def show
     redirect_to recipes_path, flash: { alert: "You are not permitted to see recipe #{@recipe.id}" } and return if @recipe.privacy == 'private' and @recipe.author != current_user
-    @picture = Picture.new
   end
 
   # GET /recipes/new
   def new
     @recipe = Recipe.new
-    @recipe.directions.new
-    @recipe.ingredients.new
-    @recipe.utensils.new
   end
 
   # GET /recipes/1/edit
   def edit
     redirect_to recipes_path, flash: {alert: 'You do not have permission to edit that recipe.'} and return if @recipe.author != current_user
+    @picture = Picture.new(recipe: @recipe)
+    @ingredient = Ingredient.new(recipe: @recipe)
+    @utensil = Utensil.new(recipe: @recipe)
+    @direction = Direction.new(recipe: @recipe)
+    render :show
   end
 
   # POST /recipes
@@ -74,6 +75,21 @@ class RecipesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to recipes_url, notice: 'Recipe was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # PUT /recipes/1/categories.json
+  def categories
+    redirect_to root_path and return if @recipe.author != current_user
+    ActiveRecord::Base.transaction do
+      @recipe.categories.delete_all
+      params[:cid].each do |cid|
+        RecipeCategory.create(recipe: @recipe, category_id: cid)
+      end
+    end
+    respond_to do |format|
+      format.html { redirect_to recipes_url, notice: 'This is an API path.' }
+      format.json { render json: @recipe.categories.select(:name) }
     end
   end
 

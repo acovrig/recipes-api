@@ -1,7 +1,7 @@
 version: '2'
 services:
   mysql:
-    image: mysql
+    image: mysql:5.7.22
     restart: "no"
     environment:
       - MYSQL_ROOT_PASSWORD=asdf
@@ -9,7 +9,7 @@ services:
       - ./mysql:/var/lib/mysql
 
   rails:
-    image: aaron/rails
+    image: reg.thecovrigs.net/acovrig/recipes:latest
     build: .
     restart: "no"
     user: "root"

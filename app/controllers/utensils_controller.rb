@@ -31,8 +31,8 @@ class UtensilsController < ApplicationController
 
     respond_to do |format|
       if @utensil.save
-        format.html { redirect_to recipe_utensil_path(@recipe, @utensil), notice: 'Utensil was successfully created.' }
-        format.json { render :show, status: :created, location: @utensil }
+        format.html { redirect_to recipe_path(@recipe), notice: 'Utensil was successfully added.' }
+        format.json { render json: @utensil }
       else
         format.html { render :new }
         format.json { render json: @utensil.errors, status: :unprocessable_entity }
