@@ -12,10 +12,13 @@ document.addEventListener('turbolinks:load', _ => {
         });
         $('select#cid').val(data.match);
       }
-		});
+    });
   });
   $('#ingredientsModal').on('shown.bs.modal', function () {
     $('#ingredient_qty').trigger('focus');
+    $('#ingredient_qty').keyup(function() {
+      this.value = this.value.replace(/[^\d\/]/, '');
+    });
   });
   $('#utensilsModal').on('shown.bs.modal', function () {
     $('#utensil_name').trigger('focus');
