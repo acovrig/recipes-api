@@ -71,6 +71,10 @@ class RecipesController < ApplicationController
   # DELETE /recipes/1.json
   def destroy
     redirect_to root_path and return if @recipe.author != current_user
+    @recipe.utensils.destroy_all
+    @recipe.ingredients.destroy_all
+    @recipe.directions.destroy_all
+    @recipe.pictures.destroy_all
     @recipe.destroy
     respond_to do |format|
       format.html { redirect_to recipes_url, notice: 'Recipe was successfully destroyed.' }
