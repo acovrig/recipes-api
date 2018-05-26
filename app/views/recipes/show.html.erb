@@ -177,7 +177,7 @@
           <div class="card-body">
             <div class="card-title">Qty</div>
             <div class="card-text">
-              <%= form.number_field :qty, step: 'any', class: 'form-control', style: 'width: 5em;', placeholder: '1' %>
+              <%= form.text_field :qty, class: 'form-control', style: 'width: 5em;', placeholder: '1', pattern: '[\d/]+' %>
             </div>
             <div class="card-title">Unit</div>
             <div class="card-text">
