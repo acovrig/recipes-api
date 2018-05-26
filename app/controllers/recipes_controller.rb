@@ -75,6 +75,7 @@ class RecipesController < ApplicationController
     @recipe.ingredients.destroy_all
     @recipe.directions.destroy_all
     @recipe.pictures.destroy_all
+    @recipe.categories.destroy_all
     @recipe.destroy
     respond_to do |format|
       format.html { redirect_to recipes_url, notice: 'Recipe was successfully destroyed.' }
