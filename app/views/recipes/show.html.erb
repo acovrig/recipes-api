@@ -7,13 +7,13 @@
   </div>
   <div>
     <table class="table-hover" id="recipe_info">
-      <% if @recipe.serving_size or action_name == 'edit' %>
+      <% if @recipe.servings or action_name == 'edit' %>
         <tr>
-          <td>Serving Size</td>
+          <td>Servings</td>
           <% if action_name == 'edit' %>
-            <td><%= number_field_tag :serving_size, @recipe.serving_size, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
+            <td><%= number_field_tag :servings, @recipe.servings, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
           <% else %>
-            <td><%= @recipe.serving_size %></td>
+            <td><%= @recipe.servings %></td>
           <% end %>
         </tr>
       <% end %>

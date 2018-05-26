@@ -3,7 +3,7 @@ class CreateRecipes < ActiveRecord::Migration[5.1]
     create_table :recipes do |t|
       t.string :name, unique: true
       t.bigint :author_id, null: false
-      t.integer :serving_size
+      t.integer :servings
       t.string :serving_suggestion
       t.float :rating
       t.string :privacy, null: false, default: 'internal'

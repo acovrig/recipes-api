@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20180514002243) do
 
   create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "recipe_id", null: false
-    t.string "qty", limit: 24
+    t.string "qty"
     t.string "unit"
     t.string "item", null: false
     t.text "note"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20180514002243) do
   create_table "recipes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.bigint "author_id", null: false
-    t.integer "serving_size"
+    t.integer "servings"
     t.string "serving_suggestion"
     t.float "rating", limit: 24
     t.string "privacy", default: "internal", null: false
