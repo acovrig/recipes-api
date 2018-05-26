@@ -64,7 +64,10 @@ function inventorySearch() {
     url: '/search.json?ingredients=' + ingredients + '&utensils=' + utensils,
     type: 'GET',
     success: data => {
-      console.log(data);
+      if(data.recipes.length > 0)
+        $('h2#results').css('display', 'inherit');
+      else
+        $('h2#results').css('display', 'none');
       $('ul#results').empty();
       data.recipes.forEach(recipe => {
         $('ul#results').append('<li><a href="/recipes/' + recipe.id + '">' + recipe.name + '</li>');
