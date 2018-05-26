@@ -11,7 +11,7 @@
     <tr>
       <th>Name</th>
       <th>Author</th>
-      <th class="tablet">Serving size</th>
+      <th class="tablet">Servings</th>
       <th class="tablet">Serving suggestion</th>
       <th class="desktop">Rating</th>
       <th class="desktop">Edit</th>
@@ -30,7 +30,7 @@
             <%= link_to recipe.author.name, author_path(recipe.author) %>
           <% end %>
         </td>
-        <td class="tablet"><%= recipe.serving_size %></td>
+        <td class="tablet"><%= recipe.servings %></td>
         <td class="tablet"><%= recipe.serving_suggestion %></td>
         <td class="desktop"><%= recipe.rating %></td>
         <td class="desktop">
