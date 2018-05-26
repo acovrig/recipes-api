@@ -1,6 +1,21 @@
 <h2 style="text-align: center;">What can I make?</h2>
 <div class="flexbox">
   <div>
+    <h3>I want ingredients that match:</h3>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="match" id="all" value="all" onchange="inventorySearch()" checked>
+      <label class="form-check-label" for="all">
+        All ingredients and utensils
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="match" id="partial" value="partial" onchange="inventorySearch()">
+      <label class="form-check-label" for="partial">
+        At least one ingredient or utensil
+      </label>
+    </div>
+  </div>
+  <div>
     <h3>I have these ingredients:</h3>
     <div class="form-inline">
       <%= select_tag :ingredients, options_from_collection_for_select(@ingredients, 'id', 'item'), class: 'form-control' %>

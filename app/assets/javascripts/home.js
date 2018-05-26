@@ -53,6 +53,7 @@ function delUtensilSearch(id) {
 }
 
 function inventorySearch() {
+  match = $('input[name="match"]:checked').val();
   ingredients = [], utensils = [];
   $('#ingredients li').each((i, elem) => {
     ingredients.push($(elem).text());
@@ -61,7 +62,7 @@ function inventorySearch() {
     utensils.push($(elem).text());
   });
   $.ajax({
-    url: '/search.json?ingredients=' + ingredients + '&utensils=' + utensils,
+    url: '/search.json?match=' + match + '&ingredients=' + ingredients + '&utensils=' + utensils,
     type: 'GET',
     success: data => {
       if(data.recipes.length > 0)

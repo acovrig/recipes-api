@@ -24,6 +24,18 @@ class HomeController < ApplicationController
       @results = {
         recipes: Recipe.where('id in (?)', ids).select(:id, :name)
       }
+      if params[:match] == 'all'
+        nids = []
+        @results[:recipes].each do |recipe|
+          recipe.ingredients.pluck(:item).each do |ingredient|
+            nids << recipe.id unless ingredients.include? ingredient
+          end
+          recipe.utensils.pluck(:name).each do |utensil|
+            nids << recipe.id unless utensils.include? utensil
+          end
+        end
+        @results[:recipes] = @results[:recipes].where('id NOT IN (?)', nids)
+      end
     end
     if user_signed_in?
       @results[:recipes] = @results[:recipes].where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
