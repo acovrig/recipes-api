@@ -28,7 +28,8 @@ class DirectionsController < ApplicationController
   def create
     @direction = Direction.new(direction_params)
     @direction.recipe = @recipe
-    @direction.step = @recipe.directions.order(step: :asc).last.id + 1 if @direction.step.nil?
+    last = @recipe.directions.order(step: :asc).last
+    @direction.step = (last.nil? ? 0 : last.id) + 1 if @direction.step.nil?
     respond_to do |format|
       if @direction.save
         format.html { redirect_to recipe_direction_path(@recipe, @direction), notice: 'Direction was successfully created.' }

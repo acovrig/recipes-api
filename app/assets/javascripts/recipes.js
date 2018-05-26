@@ -17,7 +17,7 @@ document.addEventListener('turbolinks:load', _ => {
   $('#ingredientsModal').on('shown.bs.modal', function () {
     $('#ingredient_qty').trigger('focus');
     $('#ingredient_qty').keyup(function() {
-      this.value = this.value.replace(/[^\d\/]/, '');
+      this.value = this.value.replace(/[^\d\/ ]/, '');
     });
   });
   $('#utensilsModal').on('shown.bs.modal', function () {
@@ -27,6 +27,16 @@ document.addEventListener('turbolinks:load', _ => {
     $('#direction_action').trigger('focus');
   });
 });
+
+function smartUnit(elem) {
+  if(elem.value == 'c')
+    elem.value = 'cup';
+  else if(elem.value == 't' || elem.value.toLowerCase() == 'tsp')
+    elem.value = 'teaspoon';
+  else if(elem.value == 'T' || elem.value.toLowerCase() == 'tbsp')
+    elem.value = 'Tablespoon';
+  elem.value = elem.value.toLowerCase();
+}
 
 function editRecipe(elem) {
   form = {recipe: {}};

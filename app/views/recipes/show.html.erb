@@ -3,7 +3,8 @@
 <div class="flex-container">
   <div>
     <h2><%= @recipe.name %></h2>
-    <span>by <%= @recipe.author.name %></span>
+    <span>by <%= @recipe.author.name %></span><br>
+    <%= link_to 'Delete Recipe', recipe_path(@recipe), method: :delete, data: {confirm: "Are you sure you want to delete #{@recipe.name}?\nIf it is shared, everyone will lose access to it."}, class: 'btn btn-danger' if action_name == 'edit' %>
   </div>
   <div>
     <table class="table-hover" id="recipe_info">
@@ -31,7 +32,7 @@
         <tr>
           <td>Rating</td>
           <% if action_name == 'edit' %>
-            <td><%= number_field_tag :rating, @recipe.rating, step: 'any', max: 10, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
+            <td><%= number_field_tag :rating, @recipe.rating, step: 'any', max: 5, min: 1, class: 'form-control', onblur: "editRecipe(this);" %></td>
           <% else %>
             <td><%= @recipe.rating %></td>
           <% end %>
@@ -61,7 +62,7 @@
   <% @recipe.ingredients.each do |ing| %>
     <li id="ingredient<%= ing.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= "#{@recipe.id}, #{ing.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= ing.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %>
     </li>
@@ -77,7 +78,7 @@
   <% @recipe.utensils.each do |util| %>
     <li id="utensil<%= util.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= "#{@recipe.id}, #{util.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= util.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= util.qty %> <%= util.name %>
     </li>
@@ -111,7 +112,7 @@
   <% @recipe.directions.each do |dir| %>
     <li id="direction<%= dir.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delDirection(<%= "#{@recipe.id}, #{dir.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delDirection(<%= dir.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= dir.action %>
     </li>
@@ -177,11 +178,12 @@
           <div class="card-body">
             <div class="card-title">Qty</div>
             <div class="card-text">
-              <%= form.text_field :qty, class: 'form-control', style: 'width: 5em;', placeholder: '1', pattern: '[\d/]+' %>
+              <%= form.text_field :qty, class: 'form-control', style: 'width: 5em;', placeholder: '1', pattern: '[\d/ ]+' %>
             </div>
             <div class="card-title">Unit</div>
             <div class="card-text">
-              <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %>
+              <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onblur: 'smartUnit(this);' %>
+              <span class="form-text text-muted">You can use <strong>c</strong> for cups, <strong>t</strong> for teaspoons, and <strong>T</strong> for tablespoons.</span>
             </div>
             <div class="card-title">Item</div>
             <div class="card-text">

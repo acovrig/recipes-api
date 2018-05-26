@@ -25,6 +25,26 @@ table#recipe_info td, table#recipe_info th {
   justify-content: space-between;
 }
 
+form#new_ingredient {
+  div.card-body {
+    padding: 0rem 1.25rem 1.25rem 1.25rem !important;
+  }
+  div.card-title {
+    margin-top: 0.75rem;
+    margin-bottom: 0px !important;
+  }
+}
+
+form#new_utensil {
+  div.card-body {
+    padding: 0rem 1.25rem 1.25rem 1.25rem !important;
+  }
+  div.card-title {
+    margin-top: 0.75rem;
+    margin-bottom: 0px !important;
+  }
+}
+
 #gallery {
   max-width: 100%;
   display: flex;
