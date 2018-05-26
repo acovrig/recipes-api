@@ -23,13 +23,15 @@ docker_build:
 test:
   stage: test
   script:
-    - docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q | xargs -r docker rm -vf
-    - docker run -itd --name "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:5.7.22
-    - while [ "$(docker logs "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" | egrep 'mysqld. ready for connections.')" == "" ]; do sleep 1; done; sleep 5
+    - >
+      if [ "$(docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q)" = "" ]; then
+        docker run -itd --name "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:5.7.22;
+        while [ "$(docker logs "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" | egrep 'mysqld. ready for connections.')" == "" ]; do sleep 1; done;
+        sleep 5;
+      fi
     - docker logs --tail=10 "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')"  | tail
-    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "rake db:drop db:create db:migrate"
-    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "rspec"
-    - docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q | xargs -r docker rm -vf
+    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "bundle exec rake db:drop db:create db:migrate"
+    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "bundle exec rspec"
 
 docker_push:
   stage: deploy
