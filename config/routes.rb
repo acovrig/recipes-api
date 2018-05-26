@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   end
   resources :categories
   get 'search', to: 'home#search', as: 'search'
+  get 'search/inventory', to: 'home#inventory', as: 'inventory_search'
   get 'utensils/search', to: 'utensils#search', as: 'search_utensil'
   get 'notes/search', to: 'notes#search', as: 'search_note'
   get 'ingredients/search', to: 'ingredients#search', as: 'search_ingredient'
