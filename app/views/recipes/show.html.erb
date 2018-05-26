@@ -2,7 +2,11 @@
 <%= hidden_field_tag :rid, @recipe.id %>
 <div class="flex-container">
   <div>
-    <h2><%= @recipe.name %></h2>
+    <% if action_name == 'edit' %>
+      <%= text_field_tag :name, @recipe.name, class: 'form-control', onblur: "editRecipe(this);" %>
+    <% else %>
+      <h2><%= @recipe.name %></h2>
+    <% end %>
     <span>by <%= @recipe.author.name %></span><br>
     <%= link_to 'Delete Recipe', recipe_path(@recipe), method: :delete, data: {confirm: "Are you sure you want to delete #{@recipe.name}?\nIf it is shared, everyone will lose access to it."}, class: 'btn btn-danger' if action_name == 'edit' %>
   </div>

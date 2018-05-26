@@ -45,9 +45,7 @@ function editRecipe(elem) {
     url: '/recipes/' + $('#rid').val() + '.json',
     type: 'PUT',
     data: form,
-    success: data => {
-      console.log(data);
-    }, error: data => {
+    error: data => {
       console.error(data);
     }
   });
