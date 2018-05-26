@@ -7,24 +7,41 @@ class HomeController < ApplicationController
 
   def search
     @q = params[:search]
-    @results = {
-      authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
-      recipes: Recipe.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
-      categories: Category.where('name LIKE ?', "%#{@q}%"),
-      utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
-      ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
-    }
+    ingredients = params[:ingredients].split(',')
+    utensils = params[:utensils].split(',')
+    if !@q.nil?
+      @results = {
+        authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+        recipes: Recipe.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
+        categories: Category.where('name LIKE ?', "%#{@q}%"),
+        utensils: Utensil.where('name like ?', "%#{@q}%").distinct.pluck(:name),
+        ingredients: Ingredient.where('item like ?', "%#{@q}%").distinct.pluck(:item)
+      }
+    elsif !(ingredients.nil? and utensils.nil?)
+      ids = []
+      ids += Ingredient.where('item in (?)', ingredients).pluck(:recipe_id)
+      ids += Utensil.where('name in (?)', utensils).pluck(:recipe_id)
+      @results = {
+        recipes: Recipe.where('id in (?)', ids).select(:id, :name)
+      }
+    end
     if user_signed_in?
       @results[:recipes] = @results[:recipes].where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
     else
       @results[:recipes] = @results[:recipes].where(privacy: 'public')
     end
+    @results[:recipes].order(name: :asc)
 
     respond_to do |format|
       format.html {}
       format.json { render json: @results and return }
     end
   end # search
+
+  def inventory
+    @ingredients = Ingredient.select(:id, :item).order(item: :asc).uniq{|u| u.item}
+    @utensils = Utensil.select(:id, :name).order(name: :asc).uniq{|u| u.name}
+  end # inventory
 
   def author
     @user = User.find_by(id: params[:id])

@@ -1,0 +1,23 @@
+<h2 style="text-align: center;">What can I make?</h2>
+<div class="flexbox">
+  <div>
+    <h3>I have these ingredients:</h3>
+    <div class="form-inline">
+      <%= select_tag :ingredients, options_from_collection_for_select(@ingredients, 'id', 'item'), class: 'form-control' %>
+      <button class="btn btn-success" onclick="addIngredientSearch()"><%= fa_icon 'plus' %></button>
+    </div>
+    <ul id="ingredients"></ul>
+  </div>
+
+  <div>
+    <h3>I have these utensils:</h3>
+    <div class="form-inline">
+      <%= select_tag :utensils, options_from_collection_for_select(@utensils, 'id', 'name'), class: 'form-control' %>
+      <button class="btn btn-success" onclick="addUtensilSearch()"><%= fa_icon 'plus' %></button>
+    </div>
+    <ul id="utensils"></ul>
+  </div>
+</div>
+
+<h2>I can make these recipes:</h2>
+<ul id="results"></ul>
