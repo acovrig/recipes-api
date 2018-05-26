@@ -62,7 +62,7 @@
   <% @recipe.ingredients.each do |ing| %>
     <li id="ingredient<%= ing.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= "#{@recipe.id}, #{ing.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= ing.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %>
     </li>
@@ -78,7 +78,7 @@
   <% @recipe.utensils.each do |util| %>
     <li id="utensil<%= util.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= "#{@recipe.id}, #{util.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= util.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= util.qty %> <%= util.name %>
     </li>
@@ -112,7 +112,7 @@
   <% @recipe.directions.each do |dir| %>
     <li id="direction<%= dir.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delDirection(<%= "#{@recipe.id}, #{dir.id}" %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delDirection(<%= dir.id %>)"><%= fa_icon 'trash' %></button>
       <% end %>
       <%= dir.action %>
     </li>
