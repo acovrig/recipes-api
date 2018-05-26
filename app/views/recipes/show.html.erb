@@ -5,7 +5,10 @@
     <% if action_name == 'edit' %>
       <%= text_field_tag :name, @recipe.name, class: 'form-control', onblur: "editRecipe(this);" %>
     <% else %>
-      <h2><%= @recipe.name %></h2>
+      <h2>
+        <%= @recipe.name %>
+        <%= fa_icon (@recipe.privacy == 'internal' ? 'user' : (@recipe.privacy == 'unlisted' ? 'shield' : (@recipe.privacy == 'private' ? 'lock' : 'globe'))), id: "privacy-#{@recipe.privacy}" %>
+      </h2>
     <% end %>
     <span>by <%= @recipe.author.name %></span><br>
     <%= link_to 'Delete Recipe', recipe_path(@recipe), method: :delete, data: {confirm: "Are you sure you want to delete #{@recipe.name}?\nIf it is shared, everyone will lose access to it."}, class: 'btn btn-danger' if action_name == 'edit' %>
@@ -122,6 +125,44 @@
     </li>
   <% end %>
 </ol>
+<% if action_name == 'edit' %>
+  <div class="form-group">
+    <label>Privacy</label>
+    <span class="form-text text-muted">Only you (<%= current_user.name %>) can edit this recipe</span>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="public" value="public" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'public' %>>
+      <label class="form-check-label" for="public">
+        <%= fa_icon 'globe' %>
+        Public<br>
+        <span class="form-text text-muted">Anyone can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="internal" value="internal" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'internal' %>>
+      <label class="form-check-label" for="internal">
+        <%= fa_icon 'user' %>
+        Internal<br>
+        <span class="form-text text-muted">Any logged in user can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="unlisted" value="unlisted" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'unlisted' %>>
+      <label class="form-check-label" for="unlisted">
+        <%= fa_icon 'shield' %>
+        Unlisted<br>
+        <span class="form-text text-muted">Anyone with the link can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="private" value="private" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'private' %>>
+      <label class="form-check-label" for="private">
+        <%= fa_icon 'lock' %>
+        Private<br>
+        <span  class="form-text text-muted">Only I (<%= current_user.name %>) can see this recipe</span>
+      </label>
+    </div>
+  </div>
+  <% end %>
 
 <% if action_name == 'edit' %>
   <%= link_to 'Back', recipe_path(@recipe) %>
@@ -134,7 +175,6 @@
   <div class="modal fade" id="<%= "pic#{pic.id}" %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-
         <div class="modal-header">
           <%= link_to fa_icon('trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' if action_name == 'edit' %>
           <h4 class="modal-title" id="myLargeModalLabel-1"><%= pic.caption %></h4>

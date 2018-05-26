@@ -26,6 +26,10 @@ document.addEventListener('turbolinks:load', _ => {
   $('#directionsModal').on('shown.bs.modal', function () {
     $('#direction_action').trigger('focus');
   });
+  $('#privacy-public').popover({trigger: 'hover', content: 'Anyone can see this recipe', title: 'Public'});
+  $('#privacy-internal').popover({trigger: 'hover', content: 'Any logged in user can see this recipe', title: 'Internal'});
+  $('#privacy-unlisted').popover({trigger: 'hover', content: 'Anyone with the link can see this recipe', title: 'Unlisted'});
+  $('#privacy-private').popover({trigger: 'hover', content: 'Only you can see this recipe', title: 'Private'});
 });
 
 function smartUnit(elem) {
@@ -40,7 +44,7 @@ function smartUnit(elem) {
 
 function editRecipe(elem) {
   form = {recipe: {}};
-  form['recipe'][elem.id] = elem.value;
+  form['recipe'][elem.name] = elem.value;
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '.json',
     type: 'PUT',
