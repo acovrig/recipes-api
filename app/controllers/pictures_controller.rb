@@ -37,7 +37,7 @@ class PicturesController < ApplicationController
 
     respond_to do |format|
       if @picture.save
-        format.html { redirect_to recipe_path(@recipe), notice: 'Picture was successfully added.' }
+        format.html { redirect_to edit_recipe_path(@recipe), notice: 'Picture was successfully added.' }
         format.json { render :show, status: :created, location: @picture }
       else
         format.html { render :new }
