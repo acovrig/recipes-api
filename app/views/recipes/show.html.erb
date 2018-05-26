@@ -182,7 +182,8 @@
             </div>
             <div class="card-title">Unit</div>
             <div class="card-text">
-              <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onkeyup: "this.value = this.value.toLowerCase();" %>
+              <%= form.text_field :unit, class: 'form-control', style: 'width: 6em;', placeholder: 'cup', onblur: 'smartUnit(this);' %>
+              <span class="form-text text-muted">You can use <strong>c</strong> for cups, <strong>t</strong> for teaspoons, and <strong>T</strong> for tablespoons.</span>
             </div>
             <div class="card-title">Item</div>
             <div class="card-text">

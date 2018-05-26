@@ -28,6 +28,16 @@ document.addEventListener('turbolinks:load', _ => {
   });
 });
 
+function smartUnit(elem) {
+  if(elem.value == 'c')
+    elem.value = 'cup';
+  else if(elem.value == 't' || elem.value.toLowerCase() == 'tsp')
+    elem.value = 'teaspoon';
+  else if(elem.value == 'T' || elem.value.toLowerCase() == 'tbsp')
+    elem.value = 'Tablespoon';
+  elem.value = elem.value.toLowerCase();
+}
+
 function editRecipe(elem) {
   form = {recipe: {}};
   form['recipe'][elem.id] = elem.value;
