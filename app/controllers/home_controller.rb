@@ -7,8 +7,8 @@ class HomeController < ApplicationController
 
   def search
     @q = params[:search]
-    ingredients = params[:ingredients].split(',')
-    utensils = params[:utensils].split(',')
+    ingredients = params[:ingredients].split(',') if params[:ingredients]
+    utensils = params[:utensils].split(',') if params[:utensils]
     if !@q.nil?
       @results = {
         authors: User.where('name LIKE :q', {q: "%#{@q}%"}).select(:id, :name),
