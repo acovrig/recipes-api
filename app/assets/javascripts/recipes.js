@@ -17,7 +17,7 @@ document.addEventListener('turbolinks:load', _ => {
   $('#ingredientsModal').on('shown.bs.modal', function () {
     $('#ingredient_qty').trigger('focus');
     $('#ingredient_qty').keyup(function() {
-      this.value = this.value.replace(/[^\d\/]/, '');
+      this.value = this.value.replace(/[^\d\/ ]/, '');
     });
   });
   $('#utensilsModal').on('shown.bs.modal', function () {
