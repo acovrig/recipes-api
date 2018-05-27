@@ -12,7 +12,7 @@
       <th>Name</th>
       <th>Author</th>
       <th class="tablet">Servings</th>
-      <th class="tablet">Serving suggestion</th>
+      <th class="desktop">Serving suggestion</th>
       <th class="desktop">Rating</th>
       <th class="desktop">Edit</th>
       <th class="desktop">Delete</th>
@@ -22,7 +22,8 @@
   <tbody>
     <% @recipes.each do |recipe| %>
       <tr>
-        <td><%= link_to recipe.name, recipe %></td>
+        <td class="mobile <%= (recipe.rating < 2 ? 'bg-danger' : (recipe.rating < 4 ? 'bg-warning' : 'bg-success')) if recipe.rating %>"><%= link_to recipe.name, recipe %></td>
+        <td class="desktop"><%= link_to recipe.name, recipe %></td>
         <td>
           <% if controller_name == 'home' and action_name == 'author' %>
             <%= recipe.author.name %>
@@ -31,8 +32,17 @@
           <% end %>
         </td>
         <td class="tablet"><%= recipe.servings %></td>
-        <td class="tablet"><%= recipe.serving_suggestion %></td>
-        <td class="desktop"><%= recipe.rating %></td>
+        <td class="desktop"><%= recipe.serving_suggestion %></td>
+        <td class="desktop">
+          <% if recipe.rating %>
+            <% (1..(recipe.rating)).each do %>
+              <%= icon 'fas', 'star' %>
+            <% end %>
+            <% (1..(5-recipe.rating)).each do %>
+              <%= icon 'far', 'star' %>
+            <% end %>
+          <% end %>
+        </td>
         <td class="desktop">
           <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
             <%= icon 'fas', 'edit' %>
