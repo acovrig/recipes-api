@@ -22,7 +22,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'popper_js'
 gem 'bootstrap'
 gem 'jquery-rails'
-gem 'font-awesome-rails'
+gem 'font-awesome-sass', '~> 5.0.13'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 

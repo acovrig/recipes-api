@@ -39,7 +39,7 @@
     <div class="form-check">
       <input class="form-check-input" type="radio" name="recipe[privacy]" id="public" value="public" checked>
       <label class="form-check-label" for="public">
-        <%= fa_icon 'globe' %>
+        <%= icon 'fas', 'globe' %>
         Public<br>
         <span class="form-text text-muted">Anyone can see this recipe</span>
       </label>
@@ -47,7 +47,7 @@
     <div class="form-check">
       <input class="form-check-input" type="radio" name="recipe[privacy]" id="internal" value="internal">
       <label class="form-check-label" for="internal">
-        <%= fa_icon 'shield' %>
+        <%= icon 'fas', 'shield-alt' %>
         Internal<br>
         <span class="form-text text-muted">Any logged in user can see this recipe</span>
       </label>
@@ -55,7 +55,7 @@
     <div class="form-check">
       <input class="form-check-input" type="radio" name="recipe[privacy]" id="unlisted" value="unlisted">
       <label class="form-check-label" for="unlisted">
-        <%= fa_icon 'user' %>
+        <%= icon 'fas', 'user-shield' %>
         Unlisted<br>
         <span class="form-text text-muted">Anyone with the link can see this recipe</span>
       </label>
@@ -63,7 +63,7 @@
     <div class="form-check">
       <input class="form-check-input" type="radio" name="recipe[privacy]" id="private" value="private">
       <label class="form-check-label" for="private">
-        <%= fa_icon 'lock' %>
+        <%= icon 'fas', 'lock' %>
         Private<br>
         <span  class="form-text text-muted">Only I (<%= current_user.name %>) can see this recipe</span>
       </label>

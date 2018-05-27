@@ -35,12 +35,12 @@
         <td class="desktop"><%= recipe.rating %></td>
         <td class="desktop">
           <%= link_to edit_recipe_path(recipe), class: 'btn btn-sm btn-warning' do %>
-            <%= fa_icon 'edit' %>
+            <%= icon 'fas', 'edit' %>
           <% end %>
         </td>
         <td class="desktop">
           <%= link_to recipe, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
-            <%= fa_icon 'trash' %>
+            <%= icon 'fas', 'trash' %>
           <% end %>
         </td>
       </tr>
