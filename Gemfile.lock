@@ -49,6 +49,8 @@ GEM
       autoprefixer-rails (>= 6.0.3)
       popper_js (>= 1.12.9, < 2)
       sass (>= 3.5.2)
+    bootstrap-multiselect-rails (0.9.9)
+      rails (>= 4.0.0)
     builder (3.2.3)
     byebug (10.0.0)
     capybara (2.18.0)
@@ -293,6 +295,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap
+  bootstrap-multiselect-rails
   byebug
   capybara (~> 2.13)
   devise

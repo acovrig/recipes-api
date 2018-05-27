@@ -15,6 +15,7 @@
 //= require jquery
 //= require popper
 //= require bootstrap
+//= require bootstrap-multiselect
 //= require_tree .
 
 // $(document).ready(_ => {

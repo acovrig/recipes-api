@@ -7,6 +7,14 @@ div.flexbox {
   justify-content: space-between;
   flex-wrap: wrap;
 }
+
+ul.multiselect-container input[type="checkbox"] {
+  display: none;
+}
+ul.multiselect-container label {
+  display: inline-block;
+}
+
 h2#results {
   display: none;
 }

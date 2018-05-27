@@ -18,19 +18,15 @@
   <div>
     <h3>I have these ingredients:</h3>
     <div class="form-inline">
-      <%= select_tag :ingredients, options_from_collection_for_select(@ingredients, 'id', 'item'), class: 'form-control' %>
-      <button class="btn btn-success" onclick="addIngredientSearch()"><%= icon 'fas', 'plus' %></button>
+      <%= select_tag :ingredients, options_from_collection_for_select(@ingredients, 'id', 'item'), multiple: true, onchange: 'inventorySearch()', class: 'custom-select' %>
     </div>
-    <ul id="ingredients"></ul>
   </div>
 
   <div>
     <h3>I have these utensils:</h3>
     <div class="form-inline">
-      <%= select_tag :utensils, options_from_collection_for_select(@utensils, 'id', 'name'), class: 'form-control' %>
-      <button class="btn btn-success" onclick="addUtensilSearch()"><%= icon 'fas', 'plus' %></button>
+      <%= select_tag :utensils, options_from_collection_for_select(@utensils, 'id', 'name'), multiple: true, onchange: 'inventorySearch()', class: 'custom-select' %>
     </div>
-    <ul id="utensils"></ul>
   </div>
 </div>
 

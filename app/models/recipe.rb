@@ -11,6 +11,7 @@ class Recipe < ApplicationRecord
 
   validates :name, :privacy, presence: true
   validates :name, uniqueness: true
+  validates :rating, inclusion: 0..5, allow_nil: true
 
   accepts_nested_attributes_for :directions, :ingredients, :utensils, reject_if: :all_blank, allow_destroy: true
 
