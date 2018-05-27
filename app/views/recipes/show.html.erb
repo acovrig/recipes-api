@@ -1,9 +1,23 @@
-<p id="notice"><%= notice %></p>
 <%= hidden_field_tag :rid, @recipe.id %>
 <div class="flex-container">
   <div>
-    <h2><%= @recipe.name %></h2>
+    <% if action_name == 'edit' %>
+      <%= text_field_tag :name, @recipe.name, class: 'form-control', onblur: "editRecipe(this);" %>
+    <% else %>
+      <h2>
+        <%= @recipe.name %>
+        <%= icon 'fas', (@recipe.privacy == 'internal' ? 'user-shield' : (@recipe.privacy == 'unlisted' ? 'shield-alt' : (@recipe.privacy == 'private' ? 'lock' : 'globe'))), id: "privacy-#{@recipe.privacy}" %>
+      </h2>
+    <% end %>
     <span>by <%= @recipe.author.name %></span><br>
+    <% if @recipe.rating %>
+      <% (1..(@recipe.rating)).each do %>
+        <%= icon 'fas', 'star' %>
+      <% end %>
+      <% (1..(5-@recipe.rating)).each do %>
+        <%= icon 'far', 'star' %>
+      <% end %>
+    <% end %>
     <%= link_to 'Delete Recipe', recipe_path(@recipe), method: :delete, data: {confirm: "Are you sure you want to delete #{@recipe.name}?\nIf it is shared, everyone will lose access to it."}, class: 'btn btn-danger' if action_name == 'edit' %>
   </div>
   <div>
@@ -44,7 +58,7 @@
 
 <h2>Categories:
   <% if action_name == 'edit' %>
-    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#categoriesModal"><%= fa_icon 'pencil' %></button>
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#categoriesModal"><%= icon 'fas', 'edit' %></button>
   <% end %>
 </h2>
 <ul id="categories">
@@ -55,14 +69,14 @@
 
 <h2>Ingredients:
   <% if action_name == 'edit' %>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ingredientsModal"><%= fa_icon 'plus' %></button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#ingredientsModal"><%= icon 'fas', 'plus' %></button>
   <% end %>
 </h2>
 <ul id="ingredients">
   <% @recipe.ingredients.each do |ing| %>
     <li id="ingredient<%= ing.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= ing.id %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delIngredient(<%= ing.id %>)"><%= icon 'fas', 'trash' %></button>
       <% end %>
       <%= ing.qty %> <%= ing.unit %> - <%= ing.item %> <%= (ing.note.nil? or ing.note.empty?) ? '' : "(#{ing.note})" %>
     </li>
@@ -71,14 +85,14 @@
 
 <h2>Utensils:
   <% if action_name == 'edit' %>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#utensilsModal"><%= fa_icon 'plus' %></button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#utensilsModal"><%= icon 'fas', 'plus' %></button>
   <% end %>
 </h2>
 <ul id="utensils">
   <% @recipe.utensils.each do |util| %>
     <li id="utensil<%= util.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= util.id %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delUtensil(<%= util.id %>)"><%= icon 'fas', 'trash' %></button>
       <% end %>
       <%= util.qty %> <%= util.name %>
     </li>
@@ -87,7 +101,7 @@
 
 <h2>Pictures:
   <% if action_name == 'edit' %>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= fa_icon 'plus' %></button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal"><%= icon 'fas', 'plus' %></button>
   <% end %>
 </h2>
 <% if @recipe.pictures.length > 0 %>
@@ -105,19 +119,57 @@
 
 <h2>Directions:
   <% if action_name == 'edit' %>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#directionsModal"><%= fa_icon 'plus' %></button>
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#directionsModal"><%= icon 'fas', 'plus' %></button>
   <% end %>
 </h2>
 <ol id="directions">
   <% @recipe.directions.each do |dir| %>
     <li id="direction<%= dir.id %>">
       <% if action_name == 'edit' %>
-        <button type="button" class="btn btn-danger" onclick="delDirection(<%= dir.id %>)"><%= fa_icon 'trash' %></button>
+        <button type="button" class="btn btn-danger" onclick="delDirection(<%= dir.id %>)"><%= icon 'fas', 'trash' %></button>
       <% end %>
       <%= dir.action %>
     </li>
   <% end %>
 </ol>
+<% if action_name == 'edit' %>
+  <div class="form-group">
+    <label>Privacy</label>
+    <span class="form-text text-muted">Only you (<%= current_user.name %>) can edit this recipe</span>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="public" value="public" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'public' %>>
+      <label class="form-check-label" for="public">
+        <%= icon 'fas', 'globe' %>
+        Public<br>
+        <span class="form-text text-muted">Anyone can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="internal" value="internal" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'internal' %>>
+      <label class="form-check-label" for="internal">
+        <%= icon 'fas', 'user-shield' %>
+        Internal<br>
+        <span class="form-text text-muted">Any logged in user can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="unlisted" value="unlisted" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'unlisted' %>>
+      <label class="form-check-label" for="unlisted">
+        <%= icon 'fas', 'shield-alt' %>
+        Unlisted<br>
+        <span class="form-text text-muted">Anyone with the link can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="privacy" id="private" value="private" onchange="editRecipe(this);" <%= 'checked' if @recipe.privacy == 'private' %>>
+      <label class="form-check-label" for="private">
+        <%= icon 'fas', 'lock' %>
+        Private<br>
+        <span  class="form-text text-muted">Only I (<%= current_user.name %>) can see this recipe</span>
+      </label>
+    </div>
+  </div>
+  <% end %>
 
 <% if action_name == 'edit' %>
   <%= link_to 'Back', recipe_path(@recipe) %>
@@ -130,9 +182,8 @@
   <div class="modal fade" id="<%= "pic#{pic.id}" %>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-
         <div class="modal-header">
-          <%= link_to fa_icon('trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' if action_name == 'edit' %>
+          <%= link_to icon('fas', 'trash'), recipe_picture_path(@recipe, pic), method: :delete, class: 'btn btn-danger', style: 'margin-right:2em;' if action_name == 'edit' %>
           <h4 class="modal-title" id="myLargeModalLabel-1"><%= pic.caption %></h4>
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>

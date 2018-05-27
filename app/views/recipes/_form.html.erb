@@ -20,7 +20,7 @@
 
   <div class="form-group">
     <%= form.label :serving_size %>
-    <%= form.number_field :serving_size, id: :recipe_serving_size, class: 'form-control', placeholder: '1 cup' %>
+    <%= form.number_field :servings, id: :recipe_servings, class: 'form-control', placeholder: '1 cup' %>
   </div>
 
   <div class="form-group">
@@ -31,6 +31,43 @@
   <div class="form-group">
     <%= form.label :rating %>
     <%= form.text_field :rating, id: :recipe_rating, class: 'form-control', placeholder: '10' %>
+  </div>
+
+  <div class="form-group">
+    <label>Privacy</label>
+    <span class="form-text text-muted">Only you (<%= current_user.name %>) can edit this recipe</span>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="recipe[privacy]" id="public" value="public" checked>
+      <label class="form-check-label" for="public">
+        <%= icon 'fas', 'globe' %>
+        Public<br>
+        <span class="form-text text-muted">Anyone can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="recipe[privacy]" id="internal" value="internal">
+      <label class="form-check-label" for="internal">
+        <%= icon 'fas', 'shield-alt' %>
+        Internal<br>
+        <span class="form-text text-muted">Any logged in user can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="recipe[privacy]" id="unlisted" value="unlisted">
+      <label class="form-check-label" for="unlisted">
+        <%= icon 'fas', 'user-shield' %>
+        Unlisted<br>
+        <span class="form-text text-muted">Anyone with the link can see this recipe</span>
+      </label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="recipe[privacy]" id="private" value="private">
+      <label class="form-check-label" for="private">
+        <%= icon 'fas', 'lock' %>
+        Private<br>
+        <span  class="form-text text-muted">Only I (<%= current_user.name %>) can see this recipe</span>
+      </label>
+    </div>
   </div>
 
   <%= form.submit 'Save Recipe', class: 'btn btn-primary' %>

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Categories</h1>
 <div id="paginate-container">
   <div>
@@ -26,13 +24,13 @@
         <td><%= category.recipes.count %></td>
         <td>
           <%= link_to edit_category_path(category), class: 'btn btn-sm btn-warning' do %>
-            <%= fa_icon 'edit' %>
+            <%= icon 'fas', 'edit' %>
           <% end %>
         </td>
         <td>
           <%= link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
             <span class="glyphicon glyphicon-trash"></span>
-            <%= fa_icon 'trash' %>
+            <%= icon 'fas', 'trash' %>
           <% end %>
         </td>
       </tr>

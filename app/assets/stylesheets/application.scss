@@ -1,7 +1,12 @@
 @import "bootstrap";
+@import "font-awesome-sprockets";
 @import "font-awesome";
 @import "recipes";
 @import "home";
+
+a.navbar-brand {
+  padding: 0px !important;
+}
 
 #paginate-container {
   display: flex;

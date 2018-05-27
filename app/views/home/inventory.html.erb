@@ -19,7 +19,7 @@
     <h3>I have these ingredients:</h3>
     <div class="form-inline">
       <%= select_tag :ingredients, options_from_collection_for_select(@ingredients, 'id', 'item'), class: 'form-control' %>
-      <button class="btn btn-success" onclick="addIngredientSearch()"><%= fa_icon 'plus' %></button>
+      <button class="btn btn-success" onclick="addIngredientSearch()"><%= icon 'fas', 'plus' %></button>
     </div>
     <ul id="ingredients"></ul>
   </div>
@@ -28,7 +28,7 @@
     <h3>I have these utensils:</h3>
     <div class="form-inline">
       <%= select_tag :utensils, options_from_collection_for_select(@utensils, 'id', 'name'), class: 'form-control' %>
-      <button class="btn btn-success" onclick="addUtensilSearch()"><%= fa_icon 'plus' %></button>
+      <button class="btn btn-success" onclick="addUtensilSearch()"><%= icon 'fas', 'plus' %></button>
     </div>
     <ul id="utensils"></ul>
   </div>
