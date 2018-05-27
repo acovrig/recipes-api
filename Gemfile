@@ -67,6 +67,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rails_real_favicon' # <%= render 'application/favicon' %> # Edit config/favicon.json and set master_picture to app-root relative path, then run rails generate favicon to generate it
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -4,6 +4,10 @@
 @import "recipes";
 @import "home";
 
+a.navbar-brand {
+  padding: 0px !important;
+}
+
 #paginate-container {
   display: flex;
   justify-content: space-between;
