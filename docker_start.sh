@@ -7,8 +7,6 @@ if [ "$1" = "sidekiq" ]; then
 fi;
 if [ -e ./.production ]; then
 	export RAILS_ENV=production
-	echo "============ Precompiling Assets ============"
-	bundle exec rake assets:precompile || exit
 	echo "============ Migrating Database ============="
 	bundle exec rake db:migrate || exit
 	echo "============ Starting Passenger ============="

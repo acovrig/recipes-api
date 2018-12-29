@@ -21,6 +21,7 @@ ADD Gemfile Gemfile.lock /src/
 RUN bundle install
 
 COPY . /src
+RUN RAILS_ENV=production SECRET_KEY_BASE=production bundle exec rake assets:precompile
 RUN if [ -e /src/tmp/pids/server.pid ]; then \
 			rm /src/tmp/pids/server.pid; \
 		fi; \
