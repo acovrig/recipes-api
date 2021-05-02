@@ -25,6 +25,7 @@ gem 'jbuilder', '~> 2.7'
 # gem 'bcrypt', '~> 3.1.7'
 gem 'js-routes'
 
+gem 'pry'
 # auth
 gem 'devise'
 # Pinned at this version as devise currently fails unless OmniAuth::VERSION ~= /^1\./ (https://github.com/heartcombo/devise/blob/4-1-stable/lib/devise/omniauth.rb#L9)
