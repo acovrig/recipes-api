@@ -17,14 +17,28 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignore uploaded images and thumbnails.
-public/system/pictures/*
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
 /node_modules
 /yarn-error.log
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
 
+/public/assets
 .byebug_history
 .bash_history
 
-mysql/
 coverage/*
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

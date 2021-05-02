@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # NOTE: be *sure* to run `rails js:routes` anytime this file gets modified...
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   root      'home#index'
   resources :recipes do

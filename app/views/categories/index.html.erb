@@ -24,13 +24,13 @@
         <td><%= category.recipes.count %></td>
         <td>
           <%= link_to edit_category_path(category), class: 'btn btn-sm btn-warning' do %>
-            <%= icon 'fas', 'edit' %>
+            <i class="fas fa-edit"></i>
           <% end %>
         </td>
         <td>
           <%= link_to category, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' do %>
             <span class="glyphicon glyphicon-trash"></span>
-            <%= icon 'fas', 'trash' %>
+            <i class="fas fa-trash"></i>
           <% end %>
         </td>
       </tr>

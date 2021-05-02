@@ -1,0 +1,4 @@
+FROM nginx
+LABEL author="Trevor Delgado <accychan@gmail.com>"
+COPY pub/ /usr/share/nginx/html
+RUN find /usr/share/nginx/html

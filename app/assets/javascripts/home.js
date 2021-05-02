@@ -13,7 +13,7 @@ document.addEventListener('turbolinks:load', _ => {
   });
 });
 
-function inventorySearch() {
+window.inventorySearch = function() {
   match = $('input[name="match"]:checked').val();
   id = $('#ingredients').val();
   ingredients = $('#ingredients').val()

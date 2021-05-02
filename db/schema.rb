@@ -2,26 +2,28 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514002243) do
+ActiveRecord::Schema.define(version: 2018_05_14_002243) do
 
-  create_table "categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "categories", force: :cascade do |t|
     t.string "name"
     t.bigint "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "fk_rails_335fee1547"
     t.index ["name", "created_by_id"], name: "uq_category", unique: true
   end
 
-  create_table "directions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "directions", force: :cascade do |t|
     t.bigint "recipe_id", null: false
     t.integer "step", null: false
     t.string "action", null: false
@@ -31,7 +33,7 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.index ["recipe_id"], name: "index_directions_on_recipe_id"
   end
 
-  create_table "ingredients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "ingredients", force: :cascade do |t|
     t.bigint "recipe_id", null: false
     t.string "qty"
     t.string "unit"
@@ -43,7 +45,7 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.index ["recipe_id"], name: "index_ingredients_on_recipe_id"
   end
 
-  create_table "notes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "notes", force: :cascade do |t|
     t.bigint "recipe_id", null: false
     t.text "note", null: false
     t.datetime "created_at", null: false
@@ -51,8 +53,9 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.index ["recipe_id"], name: "index_notes_on_recipe_id"
   end
 
-  create_table "pictures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "pictures", force: :cascade do |t|
     t.bigint "recipe_id"
+    t.string "fname", null: false
     t.string "sum", null: false
     t.integer "width", null: false
     t.integer "height", null: false
@@ -60,16 +63,11 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.string "caption"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "pic_file_name"
-    t.string "pic_content_type"
-    t.integer "pic_file_size"
-    t.datetime "pic_updated_at"
     t.bigint "uploaded_by_id"
     t.index ["recipe_id"], name: "index_pictures_on_recipe_id"
-    t.index ["uploaded_by_id"], name: "fk_rails_5749680f63"
   end
 
-  create_table "recipe_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "recipe_categories", force: :cascade do |t|
     t.bigint "recipe_id", null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
@@ -79,20 +77,19 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.index ["recipe_id"], name: "index_recipe_categories_on_recipe_id"
   end
 
-  create_table "recipes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "recipes", force: :cascade do |t|
     t.string "name"
     t.bigint "author_id", null: false
     t.integer "servings"
     t.string "serving_suggestion"
-    t.float "rating", limit: 24
+    t.float "rating"
     t.string "privacy", default: "internal", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "fk_rails_08ee84afe6"
     t.index ["name", "author_id"], name: "uq_recipe", unique: true
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -110,7 +107,7 @@ ActiveRecord::Schema.define(version: 20180514002243) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "utensils", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "utensils", force: :cascade do |t|
     t.bigint "recipe_id", null: false
     t.string "name", null: false
     t.integer "qty", default: 1, null: false

@@ -32,7 +32,7 @@ document.addEventListener('turbolinks:load', _ => {
   $('#privacy-private').popover({trigger: 'hover', content: 'Only you can see this recipe', title: 'Private'});
 });
 
-function smartUnit(elem) {
+window.smartUnit = function(elem) {
   if(elem.value == 'c')
     elem.value = 'cup';
   else if(elem.value == 't' || elem.value.toLowerCase() == 'tsp')
@@ -42,7 +42,7 @@ function smartUnit(elem) {
   elem.value = elem.value.toLowerCase();
 }
 
-function editRecipe(elem) {
+window.editRecipe = function(elem) {
   form = {recipe: {}};
   form['recipe'][elem.name] = elem.value;
   $.ajax({
@@ -55,7 +55,7 @@ function editRecipe(elem) {
   });
 }
 
-function editCategories() {
+window.editCategories = function() {
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/categories.json',
     type: 'PUT',
@@ -72,7 +72,7 @@ function editCategories() {
   });
 }
 
-function addIngredient(e) {
+window.addIngredient = function(e) {
   e.preventDefault();
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/ingredients.json',
@@ -95,7 +95,7 @@ function addIngredient(e) {
   return false;
 }
 
-function delIngredient(id) {
+window.delIngredient = function(id) {
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/ingredients/' + id + '.json',
     type: 'DELETE',
@@ -105,7 +105,7 @@ function delIngredient(id) {
   });
 }
 
-function addUtensil(e) {
+window.addUtensil = function(e) {
   e.preventDefault();
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/utensils.json',
@@ -125,7 +125,7 @@ function addUtensil(e) {
   return false;
 }
 
-function delUtensil(id) {
+window.delUtensil = function(id) {
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/utensils/' + id + '.json',
     type: 'DELETE',
@@ -135,7 +135,7 @@ function delUtensil(id) {
   });
 }
 
-function addDirection(e) {
+window.addDirection = function(e) {
   e.preventDefault();
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/directions.json',
@@ -155,7 +155,7 @@ function addDirection(e) {
   return false;
 }
 
-function delDirection(id) {
+window.delDirection = function(id) {
   $.ajax({
     url: '/recipes/' + $('#rid').val() + '/directions/' + id + '.json',
     type: 'DELETE',

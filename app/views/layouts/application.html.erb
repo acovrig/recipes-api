@@ -5,10 +5,11 @@
     <%#subtitle>Your Food, Your Choice</subtitle%>
     <%= csrf_meta_tags %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag    'application', media: 'all' %>
-    <%= javascript_include_tag 'application' %>
     <%= render 'application/favicon' %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
@@ -52,7 +53,7 @@
     <% end %>
 
     <div class="container" style="padding-top: 20px;">
-      <div class="jumbotron">
+      <div class="jumbotron" id="vue_app">
         <%= yield %>
       </div>
     </div>

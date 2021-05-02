@@ -2,43 +2,52 @@ image: docker:stable
 
 stages:
   - build
-  - test
   - deploy
 
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_COMMIT_SHA
+  ASSETS_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/assets:$CI_COMMIT_SHA
   DOCKER_DRIVER: overlay2
-  MYSQL_DATABASE: test
-  MYSQL_ROOT_PASSWORD: asdf
   RAILS_ENV: test
+  SERVICE_NAME: prod_recipes_api
+  ASSETS_NAME: prod_recipes_assets
 
 before_script:
   - docker info
+  - 'which ssh-agent || apk add openssh-client'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir ~/.ssh
+  - ssh-keyscan $PROD_IP >~/.ssh/known_hosts
 
-docker_build:
+
+build:
   stage: build
   script:
     - docker build -t $CONTAINER_IMAGE .
-
-test:
-  stage: test
-  script:
-    - >
-      if [ "$(docker ps -af "name=mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -q)" = "" ]; then
-        docker run -itd --name "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD mysql:5.7.22;
-        while [ "$(docker logs "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')" | egrep 'mysqld. ready for connections.')" == "" ]; do sleep 1; done;
-        sleep 5;
-      fi
-    - docker logs --tail=10 "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')"  | tail
-    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "bin/rails db:environment:set RAILS_ENV=test; bundle exec rake db:drop db:create db:migrate"
-    - docker run -i --rm --link "mysql_$(echo "$CI_PROJECT_PATH"|sed 's/\//-/g')":mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD -e RAILS_ENV=$RAILS_ENV $CONTAINER_IMAGE bash -c "bundle exec rspec"
-
-docker_push:
-  stage: deploy
-  script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CONTAINER_IMAGE
+
     - docker tag $CONTAINER_IMAGE $CI_REGISTRY/$CI_PROJECT_PATH:latest
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH:latest
+
+    - docker create --name=tmp_recipes_assets $CONTAINER_IMAGE
+    - docker cp tmp_recipes_assets:/app/public pub
+    - docker rm -vf tmp_recipes_assets
+
+    - docker build -f Dockerfile-assets -t $ASSETS_IMAGE .
+    - docker push $ASSETS_IMAGE
+    - docker tag $ASSETS_IMAGE $CI_REGISTRY/$CI_PROJECT_PATH/assets:latest
+    - docker push $CI_REGISTRY/$CI_PROJECT_PATH/assets:latest
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying $ASSETS_IMAGE to $ASSETS_NAME"
+    - ssh $PROD_USER@$PROD_IP "docker service update --force --image $ASSETS_IMAGE --with-registry-auth $ASSETS_NAME"
+    - echo "Deploying $CONTAINER_IMAGE to $SERVICE_NAME"
+    - ssh $PROD_USER@$PROD_IP "docker service update --force --image $CONTAINER_IMAGE --with-registry-auth $SERVICE_NAME"
   only:
     - master
