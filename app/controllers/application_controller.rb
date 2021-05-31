@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :null_session
+  protect_from_forgery with: :null_session, unless: -> { request.format.json? }
   before_action :config_devise_params, if: :devise_controller?
 
   protected

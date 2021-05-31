@@ -18,5 +18,34 @@ module Rails6template
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.encoding = "utf-8"
+
+    config.action_cable.allowed_request_origins = [
+      'dev-recipes.thecovrigs.net',
+      'recipes.thecovrigs.net',
+      'recipe-app.thecovrigs.net',
+      # vuejs
+      'localhost:8080',
+      '192.168.5.10:8080',
+      # vuejs
+      'localhost:8081',
+      '192.168.5.10:8081',
+      # app
+      nil
+    ]
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins(
+          'dev-recipes.thecovrigs.net',
+          'recipes.thecovrigs.net',
+          'recipe-app.thecovrigs.net',
+          # vuejs
+          /localhost:.*/,
+          /192.168.5.10:.*/,
+        )
+        resource '*', :headers => :any, expose: %w[access-token expiry token-type uid client], :methods => [:get, :post, :options, :delete], credentials: true
+      end
+    end
   end
 end

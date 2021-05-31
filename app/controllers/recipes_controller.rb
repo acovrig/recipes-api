@@ -11,13 +11,35 @@ class RecipesController < ApplicationController
       @recipes = Recipe.public_recipes
     end
     @per_page = (params[:per_page] ? params[:per_page] : 50)
-    @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
+    respond_to do |format|
+      format.html do
+        @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
+      end
+      format.json do
+        data = @recipes.as_json(include: [
+                                        categories: {only: [:id]}
+                                      ])
+        data.map{ |r| r['categories'] = r['categories'].map{ |c| c['id'] } }
+        render json: data
+      end
+    end
   end
 
   # GET /recipes/1
   # GET /recipes/1.json
   def show
     redirect_to recipes_path, flash: { alert: "You are not permitted to see recipe #{@recipe.id}" } and return if @recipe.privacy == 'private' and @recipe.author != current_user
+    respond_to do |format|
+      format.html {}
+      format.json do
+        render json: @recipe.as_json(include: [
+                          author: {only: [:id, :name]},
+                          ingredients: {only: [:id, :qty, :unit, :item, :note]},
+                          utensils: {only: [:id, :qty, :name]},
+                          directions: {only: [:id, :step, :action]},
+                        ])
+      end
+    end
   end
 
   # GET /recipes/new
@@ -101,7 +123,13 @@ class RecipesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_recipe
-      @recipe = Recipe.find(params[:id])
+      @recipe = Recipe.find_by(id: params[:id])
+      if @recipe.nil?
+        respond_to do |format|
+          format.html { super }
+          format.json { render json: {errors: ['Recipe not found']}, status: :not_found}
+        end
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

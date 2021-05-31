@@ -1,7 +1,35 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  include DeviseTokenAuth::Concerns::SetUserByToken
+
   def google_oauth2
-      # You need to implement the method below in your model (e.g. app/models/user.rb)
-      @user = User.from_omniauth(request.env['omniauth.auth'])
+      auth_params = request.env['omniauth.auth']
+      app_token = (request.env['omniauth.params'] || {})['token']
+      existing_user = current_user || User.where('email = ?', auth_params['info']['email']).first
+
+      if app_token
+        if existing_user
+          @client_id = SecureRandom.urlsafe_base64(nil, false)
+          @token     = SecureRandom.urlsafe_base64(nil, false)
+          token = BCrypt::Password.create(@token)
+          expiry = (Time.now + DeviseTokenAuth.token_lifespan).to_i
+          existing_user.tokens[@client_id] = {
+            token: token,
+            expiry: expiry
+          }
+          existing_user.save
+
+          ActionCable.server.broadcast "login_#{app_token}", {user: existing_user, auth: {
+                                                                'access-token': @token,
+                                                                client: @client_id,
+                                                                expiry: expiry,
+                                                                uid: existing_user.email,
+                                                                'token-type': 'Bearer'
+                                                              }}.as_json
+          render inline: "<script>window.close();</script>You should be logged in, please close this page.".html_safe and return
+        end
+      end
+
+      @user = User.from_omniauth(auth_params)
 
       if @user.persisted?
         flash[:notice] = I18n.t 'devise.omniauth_callbacks.success', kind: 'Google'

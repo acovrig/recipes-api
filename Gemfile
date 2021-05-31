@@ -32,11 +32,14 @@ gem 'devise'
 gem 'omniauth', '1.9.1'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-facebook'
+gem 'devise_token_auth'
 
 # pagination (for recipe#index and category#index/show)
 gem 'will_paginate'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+
+gem 'rack-cors', require: 'rack/cors'
 
 gem 'mini_magick'
 # Reduces boot times through caching; required in config/boot.rb
