@@ -24,7 +24,7 @@ module Rails6template
     config.action_cable.allowed_request_origins = [
       'dev-recipes.thecovrigs.net',
       'recipes.thecovrigs.net',
-      'recipe-app.thecovrigs.net',
+      'recipes-app.thecovrigs.net',
       # vuejs
       'localhost:8080',
       '192.168.5.10:8080',
