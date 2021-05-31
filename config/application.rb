@@ -1,6 +1,6 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,7 +19,7 @@ module Rails6template
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     config.action_cable.allowed_request_origins = [
       'dev-recipes.thecovrigs.net',
@@ -42,9 +42,9 @@ module Rails6template
           'recipe-app.thecovrigs.net',
           # vuejs
           /localhost:.*/,
-          /192.168.5.10:.*/,
+          /192.168.5.10:.*/
         )
-        resource '*', :headers => :any, expose: %w[access-token expiry token-type uid client], :methods => [:get, :post, :options, :delete], credentials: true
+        resource '*', headers: :any, expose: %w[access-token expiry token-type uid client], methods: %i[get post options delete], credentials: true
       end
     end
   end

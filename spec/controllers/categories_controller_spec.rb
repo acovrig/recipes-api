@@ -15,7 +15,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'works with login' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       get :new
@@ -31,7 +31,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category, created_by: user)
@@ -40,7 +40,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'fails with login (not my category)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category)
@@ -56,7 +56,7 @@ RSpec.describe CategoriesController, type: :controller do
       expect(response).to be_success
     end
     it 'returns success with login' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category, created_by: user)
@@ -73,7 +73,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'works with login' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.build(:category)
@@ -82,7 +82,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.build(:category).attributes.except('name')
@@ -95,37 +95,37 @@ RSpec.describe CategoriesController, type: :controller do
     it 'requires login' do
       @category = FactoryBot.create(:category)
       @category_name = FactoryBot.build(:category).name
-      put :update, params: { id: @category.id, category: {name: @category_name } }
+      put :update, params: { id: @category.id, category: { name: @category_name } }
       assert_redirected_to new_user_session_path
     end
 
     it 'works with login (my category)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category, created_by: user)
       @category_name = FactoryBot.build(:category).name
-      put :update, params: { id: @category.id, category: {name: @category_name } }
+      put :update, params: { id: @category.id, category: { name: @category_name } }
       assert_redirected_to category_path(@category)
     end
 
     it 'works with login (not my category)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category)
       @category_name = FactoryBot.build(:category).name
-      put :update, params: { id: @category.id, category: {name: @category_name } }
+      put :update, params: { id: @category.id, category: { name: @category_name } }
       assert_redirected_to root_path
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category, created_by: user)
       @category2 = FactoryBot.create(:category, created_by: user)
-      put :update, params: { id: @category.id, category: {name: @category2.name } }
+      put :update, params: { id: @category.id, category: { name: @category2.name } }
       expect(response).to be_success
     end
   end
@@ -138,7 +138,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'works with login (my category)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category, created_by: user)
@@ -147,7 +147,7 @@ RSpec.describe CategoriesController, type: :controller do
     end
 
     it 'works with login (not my category)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @category = FactoryBot.create(:category)

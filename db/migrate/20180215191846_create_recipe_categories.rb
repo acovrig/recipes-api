@@ -6,6 +6,6 @@ class CreateRecipeCategories < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
-    add_index :recipe_categories, [:recipe_id, :category_id], unique: true, name: 'uq_recipe_category'
+    add_index :recipe_categories, %i[recipe_id category_id], unique: true, name: 'uq_recipe_category'
   end
 end

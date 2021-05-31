@@ -1,11 +1,11 @@
 class CategoriesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :edit, :create, :update, :destroy]
-  before_action :set_category, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: %i[new edit create update destroy]
+  before_action :set_category, only: %i[show edit update destroy]
 
   # GET /categories
   # GET /categories.json
   def index
-    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @per_page = (params[:per_page] || 50)
     @categories = Category.all.paginate(page: params[:page], per_page: @per_page)
     render json: { all: @categories, match: Recipe.find(params[:rid]).categories.pluck(:id) } and return if params[:rid] =~ /\d+/
   end
@@ -14,12 +14,12 @@ class CategoriesController < ApplicationController
   # GET /categories/1.json
   def show
     @recipes = @category.recipes
-    if user_signed_in?
-      @recipes = @recipes.where('privacy IN (?) OR author_id = ?', %w(public internal), current_user.id)
-    else
-      @recipes = @recipes.where(privacy: 'public')
-    end
-    @per_page = (params[:per_page] ? params[:per_page] : 50)
+    @recipes = if user_signed_in?
+                 @recipes.where('privacy IN (?) OR author_id = ?', %w[public internal], current_user.id)
+               else
+                 @recipes.where(privacy: 'public')
+               end
+    @per_page = (params[:per_page] || 50)
     @recipes = @recipes.paginate(page: params[:page], per_page: @per_page)
   end
 
@@ -54,6 +54,7 @@ class CategoriesController < ApplicationController
   # PATCH/PUT /categories/1.json
   def update
     redirect_to root_path and return if @category.created_by != current_user
+
     respond_to do |format|
       if @category.update(category_params)
         format.html { redirect_to @category, notice: 'Category was successfully updated.' }
@@ -69,6 +70,7 @@ class CategoriesController < ApplicationController
   # DELETE /categories/1.json
   def destroy
     redirect_to root_path and return if @category.created_by != current_user
+
     @category.destroy
     respond_to do |format|
       format.html { redirect_to categories_url, notice: 'Category was successfully destroyed.' }
@@ -77,13 +79,14 @@ class CategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_category
-      @category = Category.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def category_params
-      params.require(:category).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_category
+    @category = Category.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def category_params
+    params.require(:category).permit(:name)
+  end
 end

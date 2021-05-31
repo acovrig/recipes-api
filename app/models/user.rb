@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
-  devise :omniauthable, omniauth_providers: [:google_oauth2, :facebook]
+  devise :omniauthable, omniauth_providers: %i[google_oauth2 facebook]
 
   has_many :recipes, foreign_key: 'author_id'
   has_many :pictures, foreign_key: 'uploaded_by_id'
@@ -14,17 +14,16 @@ class User < ApplicationRecord
   def self.from_omniauth(access_token)
     data = access_token.info
     user = User.where(email: data['email']).first
-    unless user
-      user = User.create(
-        name: data['name'],
-        email: data['email'],
-        password: Devise.friendly_token[0,20]
-      )
-    end
+    user ||= User.create(
+      name: data['name'],
+      email: data['email'],
+      password: Devise.friendly_token[0, 20]
+    )
     user
   end
 
   private
+
   def set_provider
     self[:provider] = 'email' if self[:provider].blank?
   end
@@ -32,5 +31,4 @@ class User < ApplicationRecord
   def set_uid
     self[:uid] = self[:email] if self[:uid].blank? && self[:email].present?
   end
-
 end

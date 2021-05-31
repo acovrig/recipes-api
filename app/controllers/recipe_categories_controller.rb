@@ -1,5 +1,5 @@
 class RecipeCategoriesController < ApplicationController
-  before_action :set_recipe_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_recipe_category, only: %i[show edit update destroy]
 
   # GET /recipe_categories
   # GET /recipe_categories.json
@@ -9,8 +9,7 @@ class RecipeCategoriesController < ApplicationController
 
   # GET /recipe_categories/1
   # GET /recipe_categories/1.json
-  def show
-  end
+  def show; end
 
   # GET /recipe_categories/new
   def new
@@ -18,8 +17,7 @@ class RecipeCategoriesController < ApplicationController
   end
 
   # GET /recipe_categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /recipe_categories
   # POST /recipe_categories.json
@@ -62,13 +60,14 @@ class RecipeCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_recipe_category
-      @recipe_category = RecipeCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def recipe_category_params
-      params.require(:recipe_category).permit(:recipe_id, :category_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_recipe_category
+    @recipe_category = RecipeCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def recipe_category_params
+    params.require(:recipe_category).permit(:recipe_id, :category_id)
+  end
 end

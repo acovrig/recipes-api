@@ -13,13 +13,13 @@ RSpec.describe DirectionsController, type: :controller do
 
     it 'works with login (my recipe)' do
       sign_in @recipe.author
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       get :index, params: { recipe_id: @recipe.id }
       expect(response).to be_success
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       get :index, params: { recipe_id: @recipe.id }
@@ -34,14 +34,14 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       get :new, params: { recipe_id: @recipe.id }
       expect(response).to be_success
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       get :new, params: { recipe_id: @recipe.id }
@@ -57,7 +57,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.create(:direction, recipe: @recipe)
       get :edit, params: { recipe_id: @recipe.id, id: @direction.id }
@@ -65,7 +65,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @direction = FactoryBot.create(:direction)
@@ -82,7 +82,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.build(:direction, recipe: @recipe)
       post :create, params: { recipe_id: @recipe.id, direction: @direction.attributes }
@@ -90,7 +90,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @direction = FactoryBot.build(:direction)
@@ -99,7 +99,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.build(:direction).attributes.except('action')
       post :create, params: { recipe_id: @recipe.id, direction: @direction }
@@ -111,35 +111,35 @@ RSpec.describe DirectionsController, type: :controller do
     it 'requires login' do
       @direction = FactoryBot.create(:direction)
       @direction2 = FactoryBot.build(:direction, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: {action: @direction2.action } }
+      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: { action: @direction2.action } }
       assert_redirected_to new_user_session_path
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.create(:direction, recipe: @recipe)
       @direction2 = FactoryBot.build(:direction, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: {action: @direction2.action } }
+      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: { action: @direction2.action } }
       assert_redirected_to recipe_direction_path(@recipe, @direction)
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @direction = FactoryBot.create(:direction, recipe: @recipe)
       @direction2 = FactoryBot.build(:direction, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: {action: @direction2.action } }
+      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: { action: @direction2.action } }
       assert_redirected_to recipes_path
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.create(:direction, recipe: @recipe)
       @direction2 = FactoryBot.create(:direction, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: {action: @direction2.action } }
+      put :update, params: { recipe_id: @recipe.id, id: @direction.id, direction: { action: @direction2.action } }
       expect(response).to be_success
     end
   end
@@ -152,7 +152,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @direction = FactoryBot.create(:direction, recipe: @recipe)
       delete :destroy, params: { recipe_id: @recipe.id, id: @direction.id }
@@ -160,7 +160,7 @@ RSpec.describe DirectionsController, type: :controller do
     end
 
     it 'works with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @direction = FactoryBot.create(:direction)

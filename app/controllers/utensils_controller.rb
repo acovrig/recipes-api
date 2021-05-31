@@ -1,7 +1,7 @@
 class UtensilsController < ApplicationController
   before_action :authenticate_user!, except: [:search]
   before_action :set_recipe, except: [:search]
-  before_action :set_utensil, only: [:show, :edit, :update, :destroy]
+  before_action :set_utensil, only: %i[show edit update destroy]
 
   # GET /utensils
   # GET /utensils.json
@@ -11,8 +11,7 @@ class UtensilsController < ApplicationController
 
   # GET /utensils/1
   # GET /utensils/1.json
-  def show
-  end
+  def show; end
 
   # GET /utensils/new
   def new
@@ -20,8 +19,7 @@ class UtensilsController < ApplicationController
   end
 
   # GET /utensils/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /utensils
   # POST /utensils.json
@@ -67,28 +65,29 @@ class UtensilsController < ApplicationController
   def search
     # @recipes = Utensil.where('name like ?', params[:q]).select(:recipe_id).map(&:recipe).sort_by{|r| r.name}
     @recipes = Recipe.where(id: Utensil.where('name like ?', "%#{params[:q]}%").pluck(:recipe_id))
-    if current_user
-      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
-    else
-      @recipes = @recipes.where(privacy: 'public')
-    end
+    @recipes = if current_user
+                 @recipes.where(privacy: %w[public internal]).or(Recipe.where(author: current_user))
+               else
+                 @recipes.where(privacy: 'public')
+               end
     @recipes = @recipes.select(:id, :name)
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_utensil
-      @utensil = @recipe.utensils.find_by(id: params[:id])
-      redirect_to recipe_utensils_path(@recipe), flash: { alert: "Utensil #{params[:id]} not found for #{@recipe.name}" } and return if @utensil.nil?
-    end
 
-    def set_recipe
-      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
-      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_utensil
+    @utensil = @recipe.utensils.find_by(id: params[:id])
+    redirect_to recipe_utensils_path(@recipe), flash: { alert: "Utensil #{params[:id]} not found for #{@recipe.name}" } and return if @utensil.nil?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def utensil_params
-      params.require(:utensil).permit(:recipe_id, :name, :qty)
-    end
+  def set_recipe
+    @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+    redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def utensil_params
+    params.require(:utensil).permit(:recipe_id, :name, :qty)
+  end
 end

@@ -1,7 +1,7 @@
 class IngredientsController < ApplicationController
   before_action :authenticate_user!, except: [:search]
   before_action :set_recipe, except: [:search]
-  before_action :set_ingredient, only: [:show, :edit, :update, :destroy]
+  before_action :set_ingredient, only: %i[show edit update destroy]
 
   # GET /ingredients
   # GET /ingredients.json
@@ -11,8 +11,7 @@ class IngredientsController < ApplicationController
 
   # GET /ingredients/1
   # GET /ingredients/1.json
-  def show
-  end
+  def show; end
 
   # GET /ingredients/new
   def new
@@ -20,8 +19,7 @@ class IngredientsController < ApplicationController
   end
 
   # GET /ingredients/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /ingredients
   # POST /ingredients.json
@@ -66,28 +64,29 @@ class IngredientsController < ApplicationController
 
   def search
     @recipes = Recipe.where(id: Ingredient.where('item like ?', "%#{params[:q]}%").pluck(:recipe_id))
-    if current_user
-      @recipes = @recipes.where(privacy: %w(public internal)).or(Recipe.where(author: current_user))
-    else
-      @recipes = @recipes.where(privacy: 'public')
-    end
+    @recipes = if current_user
+                 @recipes.where(privacy: %w[public internal]).or(Recipe.where(author: current_user))
+               else
+                 @recipes.where(privacy: 'public')
+               end
     @recipes = @recipes.select(:id, :name)
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ingredient
-      @ingredient = @recipe.ingredients.find_by(id: params[:id])
-      redirect_to recipe_ingredients_path(@recipe), flash: { alert: "Ingredient #{params[:id]} not found for #{@recipe.name}" } and return if @ingredient.nil?
-    end
 
-    def set_recipe
-      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
-      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ingredient
+    @ingredient = @recipe.ingredients.find_by(id: params[:id])
+    redirect_to recipe_ingredients_path(@recipe), flash: { alert: "Ingredient #{params[:id]} not found for #{@recipe.name}" } and return if @ingredient.nil?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def ingredient_params
-      params.require(:ingredient).permit(:recipe_id, :qty, :unit, :item, :note)
-    end
+  def set_recipe
+    @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+    redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def ingredient_params
+    params.require(:ingredient).permit(:recipe_id, :qty, :unit, :item, :note)
+  end
 end

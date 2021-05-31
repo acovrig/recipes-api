@@ -135,7 +135,7 @@ RecipeCategory.find_or_create_by(recipe_id: potato_soup.id, category_id: crockpo
 RecipeCategory.find_or_create_by(recipe_id: spice_cake.id, category_id: crockpot.id)
 puts 'done'
 
-cats = %w(desert easy crockpot healthy)
+cats = %w[desert easy crockpot healthy]
 cats.each do |c|
   print "\rCategory #{c} -> Recipe"
   cat = Category.find_or_create_by(name: c, created_by: u1)
@@ -145,27 +145,19 @@ cats.each do |c|
       r = FactoryBot.create(:recipe, author: [u1, u2].sample)
       (1..10).each do |ui|
         print "\rCategory #{cat.name} -> Recipe #{ri} Utensil #{ui}                                      "
-        utensil = FactoryBot.create(:utensil, recipe: r)
-      end
-      (1..10).each do |di|
+        FactoryBot.create(:utensil, recipe: r)
         print "\rCategory #{cat.name} -> Recipe #{ri} Utensil Direction #{di}                             "
-        direction = FactoryBot.create(:direction, recipe: r)
-      end
-      (1..10).each do |ii|
+        FactoryBot.create(:direction, recipe: r)
         print "\rCategory #{cat.name} -> Recipe #{ri} Utensil Direction Ingredient #{ii}                   "
-        ingredient = FactoryBot.create(:ingredient, recipe: r)
-      end
-      (1..10).each do |ni|
+        FactoryBot.create(:ingredient, recipe: r)
         print "\rCategory #{cat.name} -> Recipe #{ri} Utensil Direction Ingredient Note #{ni}               "
-        note = FactoryBot.create(:note, recipe: r)
-      end
-      (1..10).each do |pi|
+        FactoryBot.create(:note, recipe: r)
         print "\rCategory #{cat.name} -> Recipe #{ri} Utensil Direction Ingredient Note Picture #{pi}       "
-        picture = FactoryBot.create(:picture, recipe: r)
+        FactoryBot.create(:picture, recipe: r)
       end
       begin
         cat.recipes << r
-      rescue
+      rescue StandardError
         next
       end
     end

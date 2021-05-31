@@ -21,9 +21,10 @@ class Recipe < ApplicationRecord
   scope :private_recipes, -> { where(privacy: 'private') }
 
   private
-    def normalize_blank_values
-      attributes.each do |col, val|
-        self[col].present? || self[col] = nil
-      end
+
+  def normalize_blank_values
+    attributes.each do |col, _val|
+      self[col].present? || self[col] = nil
     end
+  end
 end

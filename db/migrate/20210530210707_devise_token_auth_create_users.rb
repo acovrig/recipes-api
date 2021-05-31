@@ -7,7 +7,7 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
     change_column :users, :uid, :string, null: false, default: ''
 
     ## Recoverable
-    add_column :users, :allow_password_change, :boolean, :default => false
+    add_column :users, :allow_password_change, :boolean, default: false
 
     ## Confirmable
     # add_column :users, :confirmation_token, :string
@@ -27,8 +27,8 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
     ## Tokens
     add_column :users, :tokens, :json
 
-    add_index :users, :email,                unique: true
-    add_index :users, [:uid, :provider],     unique: true
+    add_index :users, :email, unique: true
+    add_index :users, %i[uid provider], unique: true
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true

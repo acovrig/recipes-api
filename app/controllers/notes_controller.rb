@@ -1,7 +1,7 @@
 class NotesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_recipe, except: [:search]
-  before_action :set_note, only: [:show, :edit, :update, :destroy]
+  before_action :set_note, only: %i[show edit update destroy]
 
   # GET /notes
   # GET /notes.json
@@ -11,8 +11,7 @@ class NotesController < ApplicationController
 
   # GET /notes/1
   # GET /notes/1.json
-  def show
-  end
+  def show; end
 
   # GET /notes/new
   def new
@@ -20,8 +19,7 @@ class NotesController < ApplicationController
   end
 
   # GET /notes/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /notes
   # POST /notes.json
@@ -64,19 +62,20 @@ class NotesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_note
-      @note = @recipe.notes.find_by(id: params[:id])
-      redirect_to recipe_notes_path(@recipe), flash: { alert: "note #{params[:id]} not found for #{@recipe.name}" } and return if @note.nil?
-    end
 
-    def set_recipe
-      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
-      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_note
+    @note = @recipe.notes.find_by(id: params[:id])
+    redirect_to recipe_notes_path(@recipe), flash: { alert: "note #{params[:id]} not found for #{@recipe.name}" } and return if @note.nil?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def note_params
-      params.require(:note).permit(:recipe_id, :note)
-    end
+  def set_recipe
+    @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+    redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def note_params
+    params.require(:note).permit(:recipe_id, :note)
+  end
 end

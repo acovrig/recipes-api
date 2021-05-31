@@ -13,13 +13,13 @@ RSpec.describe IngredientsController, type: :controller do
 
     it 'works with login (my recipe)' do
       sign_in @recipe.author
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       get :index, params: { recipe_id: @recipe.id }
       expect(response).to be_success
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       get :index, params: { recipe_id: @recipe.id }
@@ -34,14 +34,14 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       get :new, params: { recipe_id: @recipe.id }
       expect(response).to be_success
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       get :new, params: { recipe_id: @recipe.id }
@@ -56,7 +56,7 @@ RSpec.describe IngredientsController, type: :controller do
       expect(response).to be_success
     end
     it 'returns success logged in' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @ingredient = FactoryBot.create(:ingredient)
@@ -73,7 +73,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.create(:ingredient, recipe: @recipe)
       get :edit, params: { recipe_id: @recipe.id, id: @ingredient.id }
@@ -81,7 +81,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @ingredient = FactoryBot.create(:ingredient)
@@ -98,7 +98,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.build(:ingredient, recipe: @recipe)
       post :create, params: { recipe_id: @recipe.id, ingredient: @ingredient.attributes }
@@ -106,7 +106,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @ingredient = FactoryBot.build(:ingredient)
@@ -115,7 +115,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.build(:ingredient).attributes.except('item')
       post :create, params: { recipe_id: @recipe.id, ingredient: @ingredient }
@@ -127,35 +127,35 @@ RSpec.describe IngredientsController, type: :controller do
     it 'requires login' do
       @ingredient = FactoryBot.create(:ingredient)
       @ingredient2 = FactoryBot.build(:ingredient, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: {item: @ingredient2.item } }
+      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: { item: @ingredient2.item } }
       assert_redirected_to new_user_session_path
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.create(:ingredient, recipe: @recipe)
       @ingredient2 = FactoryBot.build(:ingredient, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: {item: @ingredient2.item } }
+      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: { item: @ingredient2.item } }
       assert_redirected_to recipe_ingredient_path(@recipe, @ingredient)
     end
 
     it 'fails with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @ingredient = FactoryBot.create(:ingredient, recipe: @recipe)
       @ingredient2 = FactoryBot.build(:ingredient, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: {item: @ingredient2.item } }
+      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: { item: @ingredient2.item } }
       assert_redirected_to recipes_path
     end
 
     it 'fails with bad data' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.create(:ingredient, recipe: @recipe)
       @ingredient2 = FactoryBot.create(:ingredient, recipe: @recipe)
-      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: {item: @ingredient2.item } }
+      put :update, params: { recipe_id: @recipe.id, id: @ingredient.id, ingredient: { item: @ingredient2.item } }
       expect(response).to be_success
     end
   end
@@ -168,7 +168,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'works with login (my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @recipe.author
       @ingredient = FactoryBot.create(:ingredient, recipe: @recipe)
       delete :destroy, params: { recipe_id: @recipe.id, id: @ingredient.id }
@@ -176,7 +176,7 @@ RSpec.describe IngredientsController, type: :controller do
     end
 
     it 'works with login (not my recipe)' do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryBot.create(:user)
       sign_in user
       @ingredient = FactoryBot.create(:ingredient)

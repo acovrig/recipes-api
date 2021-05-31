@@ -8,6 +8,6 @@ FactoryBot.define do
     servings { Faker::Number.between(1, 10) }
     serving_suggestion { Faker::Food.measurement }
     rating { Faker::Number.between(1, 5) }
-    privacy { ['public', 'internal', 'unlisted', 'private'].sample }
+    privacy { %w[public internal unlisted private].sample }
   end
 end

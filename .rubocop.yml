@@ -1,0 +1,85 @@
+AllCops:
+  NewCops: enable
+  Exclude:
+    - 'bin/**' # Exclude the bin folder, it's generated
+    - 'node_modules/**/*' # Exclude node_modules, it ain't ruby
+    - 'db/schema.rb' # Exclude schema, it's generated "wrong" lol
+
+# Allow certain gloabl variables for use in tests
+# This way I don't have to DB lookup these
+# for each method when generating docs
+# Also $cur_user and $uuid is kinda required for some tests
+# as they are test instance specific vars
+# Style/GlobalVars:
+#   Enabled: true
+#   AllowedVariables:
+#     - $cur_user
+#     - $uuid
+#     - $admin
+#     - $member
+#     - $owner
+
+# TODO: add comments to files,
+# this one will take some time
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# See https://en.wikipedia.org/wiki/ABC_Software_Metric
+# I feel like this is too crazy to keep lol
+Metrics/AbcSize:
+  Enabled: false
+
+# See https://rubystyle.guide#max-line-length
+# I feel like this is too crazy to keep lol
+# May enable it later though
+Layout/LineLength:
+  Enabled: false
+
+# All test will fail as they have a line per parameter,
+# and some methods have several parameters
+Metrics/BlockLength:
+  Enabled: false
+
+# See https://rubystyle.guide/#three-is-the-number-thou-shalt-count
+# I guess this could help rework code so it's not such a mess of nested ifs
+# IDK how to make this go though, should talk to Kent about it sometime.
+Metrics/BlockNesting:
+  Enabled: false
+
+# Limits classes to 100 lines, this kinda doesn't work with some controllers
+# IDK if there's a way for this one to work
+Metrics/ClassLength:
+  Enabled: false
+
+# See https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Metrics/CyclomaticComplexity
+# Limits functions to 7 operations
+# IDK if there's a way for this one to work
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+# See https://rubystyle.guide#short-methods
+# Limits functions to 10 lines
+# IDK if there's a way for this one to work
+Metrics/MethodLength:
+  Enabled: false
+
+# See https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Style/Documentation
+# Requires a comment on each class and method
+# I feel like this is a bit much as we'd have to comment
+# on each DB migration file for example
+# I feel like the class names should be self-documenting
+Style/Documentation:
+  Enabled: false
+
+# Require comments for each gem explaining why they're there
+Bundler/GemComment:
+  Enabled: true
+
+# Require version numbers for each gem
+Bundler/GemVersion:
+  Enabled: true
+
+Bundler/OrderedGems:
+  TreatCommentsAsGroupSeparators: false

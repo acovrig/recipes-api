@@ -1,7 +1,7 @@
 class PicturesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_recipe
-  before_action :set_picture, only: [:show, :edit, :update, :destroy]
+  before_action :set_picture, only: %i[show edit update destroy]
 
   # GET /pictures
   # GET /pictures.json
@@ -11,8 +11,7 @@ class PicturesController < ApplicationController
 
   # GET /pictures/1
   # GET /pictures/1.json
-  def show
-  end
+  def show; end
 
   # GET /pictures/new
   def new
@@ -20,8 +19,7 @@ class PicturesController < ApplicationController
   end
 
   # GET /pictures/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /pictures
   # POST /pictures.json
@@ -71,20 +69,21 @@ class PicturesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_picture
-      @picture = @recipe.pictures.find_by(id: params[:id])
-      redirect_to recipe_path(@recipe), flash: { alert: "Picture #{params[:id]} not found for #{@recipe.name}" } and return if @picture.nil?
-      redirect_to recipe_path(@recipe), flash: { alert: "You do not have permission to edit recipe #{@recipe.id}" } and return if @recipe.author != current_user
-    end
 
-    def set_recipe
-      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
-      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_picture
+    @picture = @recipe.pictures.find_by(id: params[:id])
+    redirect_to recipe_path(@recipe), flash: { alert: "Picture #{params[:id]} not found for #{@recipe.name}" } and return if @picture.nil?
+    redirect_to recipe_path(@recipe), flash: { alert: "You do not have permission to edit recipe #{@recipe.id}" } and return if @recipe.author != current_user
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def picture_params
-      params.require(:picture).permit(:recipe_id, :pic, :caption)
-    end
+  def set_recipe
+    @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+    redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def picture_params
+    params.require(:picture).permit(:recipe_id, :pic, :caption)
+  end
 end

@@ -1,1 +1,1 @@
-json.partial! "directions/direction", direction: @direction
+json.partial! 'directions/direction', direction: @direction

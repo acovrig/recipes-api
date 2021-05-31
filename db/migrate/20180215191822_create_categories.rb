@@ -7,6 +7,6 @@ class CreateCategories < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_foreign_key :categories, :users, column: :created_by_id
-    add_index :categories, [:name, :created_by_id], unique: true, name: 'uq_category'
+    add_index :categories, %i[name created_by_id], unique: true, name: 'uq_category'
   end
 end

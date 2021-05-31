@@ -5,9 +5,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.string :name, null: false
       ## Database authenticatable
-      t.string :email,              null: false, default: "", unique: true
-      t.string :encrypted_password, null: false, default: ""
-      
+      t.string :email,              null: false, default: '', unique: true
+      t.string :encrypted_password, null: false, default: ''
+
       ## Omniauth
       t.string :provider
       t.string :uid

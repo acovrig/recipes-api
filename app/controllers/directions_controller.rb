@@ -1,7 +1,7 @@
 class DirectionsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_recipe
-  before_action :set_direction, only: [:show, :edit, :update, :destroy]
+  before_action :set_direction, only: %i[show edit update destroy]
 
   # GET /directions
   # GET /directions.json
@@ -11,8 +11,7 @@ class DirectionsController < ApplicationController
 
   # GET /directions/1
   # GET /directions/1.json
-  def show
-  end
+  def show; end
 
   # GET /directions/new
   def new
@@ -20,8 +19,7 @@ class DirectionsController < ApplicationController
   end
 
   # GET /directions/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /directions
   # POST /directions.json
@@ -66,19 +64,20 @@ class DirectionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_direction
-      @direction = @recipe.directions.find_by(id: params[:id])
-      redirect_to recipe_directions_path(@recipe), flash: { alert: "Direction #{params[:id]} not found for #{@recipe.name}" } and return if @direction.nil?
-    end
 
-    def set_recipe
-      @recipe = current_user.recipes.find_by(id: params[:recipe_id])
-      redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_direction
+    @direction = @recipe.directions.find_by(id: params[:id])
+    redirect_to recipe_directions_path(@recipe), flash: { alert: "Direction #{params[:id]} not found for #{@recipe.name}" } and return if @direction.nil?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def direction_params
-      params.require(:direction).permit(:step, :action)
-    end
+  def set_recipe
+    @recipe = current_user.recipes.find_by(id: params[:recipe_id])
+    redirect_to recipes_path, flash: { alert: "Recipe #{params[:recipe_id]} not found." } and return if @recipe.nil?
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def direction_params
+    params.require(:direction).permit(:step, :action)
+  end
 end

@@ -11,6 +11,6 @@ class CreateRecipes < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     add_foreign_key :recipes, :users, column: :author_id
-    add_index :recipes, [:name, :author_id], unique: true, name: 'uq_recipe'
+    add_index :recipes, %i[name author_id], unique: true, name: 'uq_recipe'
   end
 end
